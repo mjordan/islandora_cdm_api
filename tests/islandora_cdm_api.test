@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Simpletest tests against the functionality of the Islandora CONTENTdm
  * API module.
  */
@@ -25,62 +26,64 @@ class IslandoraCdmApiTestCase extends DrupalWebTestCase {
   }
 
   public function testIslandoraCONTENTdmAPIget() {
-    $this->drupalGet('islandora_cdm_api/dmGetCollectionsList/json');
+    // We need to use url() when within Simpletest when testing URLs that have query parameters.
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionsList/json'))));
     $this->assertResponse(200, 'User can access dmGetCollectionsList');
     $this->assertText('dmGetCollectionsList', "'dmGetCollectionsList' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetDublinCoreFieldInfo/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetDublinCoreFieldInfo/json'))));
     $this->assertResponse(200, 'User can access dmGetDublinCoreFieldInfo');
     $this->assertText('dmGetDublinCoreFieldInfo', "'dmGetDublinCoreFieldInfo' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetCollectionFieldInfo/foo/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionFieldInfo/json'))));
     $this->assertResponse(200, 'User can access dmGetCollectionFieldInfo');
     $this->assertText('dmGetCollectionFieldInfo', "'dmGetCollectionFieldInfo' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetCollectionParameters/foo/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionParameters/json'))));
     $this->assertResponse(200, 'User can access dmGetCollectionParameters');
     $this->assertText('dmGetCollectionParameters', "'dmGetCollectionParameters' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetCompoundObjectInfo/foo/10/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCompoundObjectInfo/json'))));
     $this->assertResponse(200, 'User can access dmGetCompoundObjectInfo');
     $this->assertText('dmGetCompoundObjectInfo', "'dmGetCompoundObjectInfo' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetImageInfo/foo/10/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetImageInfo/json'))));
     $this->assertResponse(200, 'User can access dmGetImageInfo');
     $this->assertText('dmGetImageInfo', "'dmGetImageInfo' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/dmGetItemInfo/foo/10/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetItemInfo/json'))));
     $this->assertResponse(200, 'User can access dmGetItemInfo');
     $this->assertText('dmGetItemInfo', "'dmGetItemInfo' (JSON) test successful.");
 
-    // Drupal 7 allows a maximum of 9 menu path parts, too few for dmQuery.
-    // $this->drupalGet('islandora_cdm_api/dmQuery/foo/all^hello^all^and/all/date/1024/1/1/0/0/0/0/0/json');
-    // $this->assertResponse(200, 'User can access dmQuery');
-    // $this->assertText('dmQuery', "'dmQuery' (JSON) test successful.");
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE,
+      'query' => array('c' => 'dmQuery/foo/all^hello^all^and/all/date/1024/1/1/0/0/0/0/0/json'))
+    ));
+    $this->assertResponse(200, 'User can access dmQuery');
+    $this->assertText('dmQuery', "'dmQuery' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/GetItemDmmodified/foo/10/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'GetItemDmmodified/json'))));
     $this->assertResponse(200, 'User can access GetItemDmmodified');
     $this->assertText('GetItemDmmodified', "'GetItemDmmodified' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/GetParent/foo/10/json');
+    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'GetParent/json'))));
     $this->assertResponse(200, 'User can access GetParent');
     $this->assertText('GetParent', "'GetParent' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/utils/getfile/collection/foo/id/10/filename/foo.jpg');
+    $this->drupalGet('cdm_api/utils/getfile/collection/foo/id/10/filename/foo.jpg');
     $this->assertResponse(200, 'User can access GetFile');
     $this->assertText('GetFile', "'GetFile' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/utils/ajaxhelper/?CISOROOT=foo&CISOPTR=10&action=2&DMSCALE=100&DMWIDTH=1000&DMHEIGHT=100');
+    $this->drupalGet('cdm_api/utils/ajaxhelper/?CISOROOT=foo&CISOPTR=10&action=2&DMSCALE=100&DMWIDTH=1000&DMHEIGHT=100');
     $this->assertResponse(200, 'User can access GetImage');
     $this->assertText('GetImage', "'GetImage' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/utils/getstream/collection/foo/id/10');
+    $this->drupalGet('cdm_api/utils/getstream/collection/foo/id/10');
     $this->assertResponse(200, 'User can access GetStream');
     $this->assertText('GetStream', "'GetStream' (JSON) test successful.");
 
-    $this->drupalGet('islandora_cdm_api/utils/getthumbnail/collection/foo/id/10');
+    $this->drupalGet('cdm_api/utils/getthumbnail/collection/foo/id/10');
     $this->assertResponse(200, 'User can access GetThumbnail');
     $this->assertText('GetThumbnail', "'GetThumbnail' (JSON) test successful.");
   }
 }
-?>
+
