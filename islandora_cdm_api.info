@@ -5,3 +5,4 @@ version = 7.x-dev
 core = 7.x
 configure = admin/islandora/tools/cdm_api
 dependencies[] = islandora
+files[] = tests/islandora_cdm_api.test

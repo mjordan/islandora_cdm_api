@@ -13,6 +13,7 @@ This Islandora module provides an API compatible with applications that consume 
 * dmGetItemInfo
 * dmQuery
 * GetItemDmmodified
+* GetParent
 * GetFile
 * GetImage
 * GetStream

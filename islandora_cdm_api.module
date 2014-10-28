@@ -23,7 +23,7 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetcollectionslist',
     'page arguments' => array(2),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetDublinCoreFieldInfo/%'] = array(
@@ -31,72 +31,75 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetdublincorefieldinfo',
     'page arguments' => array(2),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetCollectionFieldInfo/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'dmGetCollectionFieldInfo',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetcollectionfieldinfo',
     'page arguments' => array(2, 3),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetCollectionParameters/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'dmGetCollectionParameters',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetcollectionparameters',
     'page arguments' => array(2, 3),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetCompoundObjectInfo/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'dmGetCompoundObjectInfo',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetcompoundobjectinfo',
     'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetImageInfo/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'dmGetImageInfo',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetimageinfo',
     'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/dmGetItemInfo/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'dmGetItemInfo',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmgetiteminfo',
     'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
-  // $items['islandora_cdm_api/dmQuery/alias/searchstrings/fields/sortby/maxrecs/start/suppress/docptr/suggest/facets/showunpub/denormalizeFacets/format'] = array(
-  $items['islandora_cdm_api/dmQuery/%/%/%/%/%/%/%/%/%/%/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+  // Problem: dmQuery requires 15 path segments, but Drupal can only handle 9:
+  // https://api.drupal.org/api/drupal/includes!menu.inc/constant/MENU_MAX_PARTS/7
+  // $items['islandora_cdm_api/dmQuery/%/%/%/%/%/%/%/%/%/%/%/%/%'] = array(
+  $items['islandora_cdm_api/dmQuery/%'] = array(
+    'title' => 'dmQuery',
     'description' => '',
     'page callback' => 'islandora_cdm_api_dmquery',
-    'page arguments' => array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
-    'access arguments' => array('access CONTENTdm API'),
+    // 'page arguments' => array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+    'page arguments' => array(2),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/GetItemDmmodified/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'GetItemDmmodified',
     'description' => '',
     'page callback' => 'islandora_cdm_api_getitemdmmodified',
     'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/GetParent/%/%/%'] = array(
-    'title' => 'dmGetDublinCoreFieldInfo',
+    'title' => 'GetParent',
     'description' => '',
     'page callback' => 'islandora_cdm_api_getparent',
     'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/utils/getfile/collection/%/id/%/filename/%'] = array(
@@ -104,7 +107,7 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_getfile',
     'page arguments' => array(4, 6, 8),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/utils/ajaxhelper'] = array(
@@ -112,7 +115,7 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_getimage',
     // 'page arguments' => array(4, 6, 8),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/utils/getstream/collection/%/id/%'] = array(
@@ -120,7 +123,7 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_getstream',
     'page arguments' => array(4, 6),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['islandora_cdm_api/utils/getthumbnail/collection/%/id/%'] = array(
@@ -128,7 +131,7 @@ function islandora_cdm_api_menu() {
     'description' => '',
     'page callback' => 'islandora_cdm_api_getthumbnail',
     'page arguments' => array(4, 6),
-    'access arguments' => array('access CONTENTdm API'),
+    'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   return $items;
@@ -164,67 +167,55 @@ function islandora_cdm_api_admin_settings() {
 }
 
 function islandora_cdm_api_dmgetcollectionslist($format = 'json') {
-  $data = array('dmgetcollectionslist', $format);
+  $data = array('dmGetCollectionsList', $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetdublincorefieldinfo($format = 'json') {
-  $data = array('dmgetdublincorefieldinfo', $format);
+  $data = array('dmGetDublinCoreFieldInfo', $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetcollectionfieldinfo($alias = '', $format = 'json') {
-  $data = array('dmgetcollectionfieldinfo', $alias, $format);
+  $data = array('dmGetCollectionFieldInfo', $alias, $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetcollectionparameters($alias = '', $format = 'json') {
-  $data = array('dmgetcollectionparameters', $alias, $format);
+  $data = array('dmGetCollectionParameters', $alias, $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetcompoundobjectinfo($alias = '', $pointer = '', $format = 'json') {
-  $data = array('dmgetcompoundobjectinfo', $alias, $pointer, $format);
+  $data = array('dmGetCompoundObjectInfo', $alias, $pointer, $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetimageinfo($alias = '', $pointer = '', $format = 'json') {
-  $data = array('dmgetimageinfo', $alias, $pointer, $format);
+  $data = array('dmGetImageInfo', $alias, $pointer, $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetiteminfo($alias = '', $pointer = '', $format = 'json') {
-  $data = array('dmgetiteminfo', $alias, $pointer, $format);
+  $data = array('dmGetItemInfo', $alias, $pointer, $format);
   drupal_json_output($data);
 }
 
-// $items['islandora_cdm_api/dmQuery/alias/searchstrings/fields/sortby/maxrecs/start/suppress/docptr/suggest/facets/showunpub/denormalizeFacets/format'] = array(
-function islandora_cdm_api_dmquery($alias = '', $searchstrings = '', $fields = '', $sortby = '', $maxrecs = '1024', $start = '0', $supress = '1', $docptr = '', $suggest = '0', $facets = '', $showunpub = '0', $denormalizedFacets = '0', $format = 'json') {
-  $data = array(
-    $alias => '',
-    $searchstrings => '',
-    $fields => '',
-    $sortby => '',
-    $maxrecs => '1024',
-    $start => '0',
-    $supress => '1',
-    $docptr => '',
-    $suggest => '0',
-    $facets => '',
-    $showunpub => '0',
-    $denormalizedFacets => '0',
-    $format = 'json',
-  );
-  drupal_json_output(array('Request' => 'dmquery') + $data);
+// function islandora_cdm_api_dmquery($alias = '', $searchstrings = '', $fields = '', $sortby = '', $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0', $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0', $format = 'json') {
+function islandora_cdm_api_dmquery($paramstring) {
+  // $data = array('dmQuery', $alias, $searchstrings, $fields, $sortby, $maxrecs, $start, $supress, $docptr, $suggest, $facets, $showunpub, $denormalizedFacets, $format);
+  $data = array('dmQuery', $paramstring);
+  // drupal_json_output($data);
+  drupal_json_output($data);
 }
 
 function islandora_cdm_api_getitemdmmodified($alias = '', $pointer = '', $format = 'json') {
-  $data = array('getitemdmmodified', $alias, $pointer, $format);
+  $data = array('GetItemDmmodified', $alias, $pointer, $format);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_getparent($alias = '', $pointer = '', $format = 'json') {
-  $data = array('getparent', $alias, $pointer, $format);
+  $data = array('GetParent', $alias, $pointer, $format);
   drupal_json_output($data);
 }
 
@@ -236,7 +227,7 @@ function islandora_cdm_api_getparent($alias = '', $pointer = '', $format = 'json
 */
 
 function islandora_cdm_api_getfile($alias = 'foo', $pointer = 'bar', $filename = 'baz') {
-  $data = array('getfile', $alias, $pointer, $filename);
+  $data = array('GetFile', $alias, $pointer, $filename);
   drupal_json_output($data);
 }
 
@@ -245,16 +236,16 @@ function islandora_cdm_api_getfile($alias = 'foo', $pointer = 'bar', $filename =
  */
 function islandora_cdm_api_getimage() {
   $data = drupal_get_query_parameters();
-  drupal_json_output(array('Request' => 'getimage') + $data);
+  drupal_json_output(array('Request' => 'GetImage') + $data);
 }
 
 function islandora_cdm_api_getstream($alias = 'foo', $pointer = 'bar') {
-  $data = array($alias, $pointer);
+  $data = array('GetStream', $alias, $pointer);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_getthumbnail($alias = 'foo', $pointer = 'bar') {
-  $data = array($alias, $pointer);
-  drupal_json_output($data);
+  $data = array('GetThumbnail', $alias, $pointer);
+  drupal_json_output(array('Request' => 'getthumbnail') + $data);
 }
 
