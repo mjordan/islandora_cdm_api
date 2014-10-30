@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This Islandora module provides an API compatible with applications that consume the [CONTENTdm Web API](http://www.contentdm.org/help6/custom/customize2a.asp). It implements the following subset of the CONTENTdm API:
+This Islandora module provides an API compatible the [CONTENTdm Web API](http://www.contentdm.org/help6/custom/customize2a.asp). It is intended to provide continuing access to content migrated from CONTENTdm to Islandora by allowing client applications consuming the CONTENTdm Web API to continue to function after the migration. In effect this module "pretends" to be the CONTENTdm web API endpoint. Your apps ask questions of the CONTENTdm API, but the answers come from Islandora.
+
+The module implements the following subset of the CONTENTdm API:
 
 * dmGetCollectionList
 * dmGetDublinCoreFieldInfo
@@ -19,10 +21,12 @@ This Islandora module provides an API compatible with applications that consume 
 * GetStream
 * GetThumbnail
 
-The module enables applications desinged to consume the CONTENTdm API to issue the same requests to an Islandora instance, and get back the corresonding data, in JSON or XML, for the Islandora object matching the CONTENTdm alias and pointer identified in the request. For this to work, the following conditions must be in place:
+For the Islandora CONTENTdm API to work, the following conditions must be in place:
 
 * Islandora will need to store the identifiers from the CONTENTdm objects such that this module can query them, for example as CONTENTdm URLs in the Islandora objects' MODS metadata (e.g., in an <identifer> element.
 * Client applications that consume the CONTENTdm Web API and that intend to consume the compatible API provided by this module will need to replace base URLs to the API on their CONTENTdm server (e.g., http://contentdm.example.com:81/dmwebservices/index.php?q=) with URLs like http://islandora.sample.com/cdm_api?c=. For requests to the "Utils" (GetFile, GetImage, GetStream, and GetThumbnail), clients will need to replace their base URLs (e.g., http://example.com[:80]) URLs like http://islandora.sample.com/cdm_api/. The query paths of the requests within the client applications will not need to be changed - only the base URLs.
+
+![How the Islandora CONTENTdm API module works](https://dl.dropboxusercontent.com/u/1015702/linked_to/IslandoraCONTENTdmAPIModuleActivityDiagram.png)
 
 ## Installation
 
