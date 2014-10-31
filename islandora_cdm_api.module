@@ -239,6 +239,24 @@ function islandora_cdm_api_getthumbnail($alias = 'foo', $pointer = 'bar') {
   drupal_json_output(array('Request' => 'getthumbnail') + $data);
 }
 
-
-
+/**
+ * Return the PID of the Islandora object corresponding to the alias and pointer.
+ * During development, we do this using data from a tab-delimited file, but later
+ * we will look up a value in the MODS or other metadata via a Solr query.
+ *
+ * @param string $alias
+ *   The CONTENTdm collection alias
+ * @param string $pointer
+ *   The CONENTdm object pointer
+ */
+function islandora_cdm_api_map_to_pid($alias, $pointer) {
+  $test_data_path = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/pidmap.txt';
+  $records = file($test_data_path);
+  foreach ($records as $record) {
+    list($a, $p, $pid) = explode("\t", trim($record));
+    if (($a == $alias) && ($p == $pointer)) {
+      return $pid;
+    }
+  } 
+}
 

@@ -10,19 +10,34 @@ class IslandoraCdmApiTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Islandora CONTENTdm API tests',
-      'description' => 'Some tests.',
+      'description' => 'Various tests for the Islandora CONTENTdm API module.',
       'group' => 'Islandora CONTENTdm API',
     );
- }
+  }
 
   public function setUp() {
-    // Enable the Islandora CONTENTdm API module and its dependencies.
     parent::setUp(array('islandora_cdm_api'));
-    // Create and log in our privileged user.
     $this->privileged_user = $this->drupalCreateUser(array(
       'access contentdm api',
     ));
     $this->drupalLogin($this->privileged_user);
+  }
+
+  public function testIslandoraCONTENTdmAPIPidMap() {
+    $pid = islandora_cdm_api_map_to_pid('mycoll', '1');
+    $this->assertEqual('islandora:330', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '1')), 'Function');
+
+    $pid = islandora_cdm_api_map_to_pid('mycoll', '2');
+    $this->assertEqual('islandora:314', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '2')), 'Function');
+
+    $pid = islandora_cdm_api_map_to_pid('mycoll', '3');
+    $this->assertEqual('islandora:211', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '3')), 'Function');
+
+    $pid = islandora_cdm_api_map_to_pid('mycoll', '4');
+    $this->assertEqual('islandora:321', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '4')), 'Function');
+
+    $pid = islandora_cdm_api_map_to_pid('mycoll', '5');
+    $this->assertEqual('islandora:345', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '5')), 'Function');
   }
 
   /**

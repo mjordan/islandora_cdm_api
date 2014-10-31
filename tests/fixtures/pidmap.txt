@@ -1,0 +1,5 @@
+mycoll	1	islandora:330
+mycoll	2	islandora:314
+mycoll	3	islandora:211
+mycoll	4	islandora:321
+mycoll	5	islandora:345
