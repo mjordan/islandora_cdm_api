@@ -242,7 +242,8 @@ function islandora_cdm_api_getthumbnail($alias = 'foo', $pointer = 'bar') {
 /**
  * Return the PID of the Islandora object corresponding to the alias and pointer.
  * During development, we do this using data from a tab-delimited file, but later
- * we will look up a value in the MODS or other metadata via a Solr query.
+ * we will look up a value in the MODS or other metadata via a Solr query as illustrated
+ * in the comment below.
  *
  * @param string $alias
  *   The CONTENTdm collection alias
@@ -257,6 +258,10 @@ function islandora_cdm_api_map_to_pid($alias, $pointer) {
     if (($a == $alias) && ($p == $pointer)) {
       return $pid;
     }
-  } 
+  }
+
+  /*
+  A file_get_contents() query to http://192.168.56.101:8080/solr/select?version=1.2&wt=json&json.nl=map&q=dc.identifier:%22http://content.lib.sfu.ca/cdm/ref/collection/dkb/id/132%22 will return the description for that item, and $response->response->docs[0]->PID will get the PID.
+  */
 }
 
