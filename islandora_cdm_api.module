@@ -22,7 +22,7 @@ function islandora_cdm_api_menu() {
   // because Drupal menu paths have a maximum of 9 path segments. See
   // https://api.drupal.org/api/drupal/includes!menu.inc/constant/MENU_MAX_PARTS/7.
   // To get around this, we consider everything in the incoming request's
-  // query (?c=) to be a
+  // query (?c=) to be a single string that we parse to get the "parameters".
   $items['cdm_api'] = array(
     'title' => 'CONTENTdm API',
     'description' => '',
@@ -179,8 +179,9 @@ function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
   drupal_json_output($data);
 }
 
-function islandora_cdm_api_dmgetimageinfo($alias = '', $pointer = '', $format = 'json') {
-  $data = array('dmGetImageInfo', $alias, $pointer, $format);
+function islandora_cdm_api_dmgetimageinfo($params) {
+  // $alias, $pointer, $format
+  $data = array('dmGetImageInfo', $params);
   drupal_json_output($data);
 }
 
@@ -250,7 +251,7 @@ function islandora_cdm_api_getthumbnail($alias = 'foo', $pointer = 'bar') {
  * @param string $pointer
  *   The CONENTdm object pointer
  */
-function islandora_cdm_api_map_to_pid($alias, $pointer) {
+function islandora_cdm_api_map_request_to_pid($alias, $pointer) {
   $test_data_path = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/pidmap.txt';
   $records = file($test_data_path);
   foreach ($records as $record) {

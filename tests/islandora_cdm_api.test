@@ -24,19 +24,19 @@ class IslandoraCdmApiTestCase extends DrupalWebTestCase {
   }
 
   public function testIslandoraCONTENTdmAPIPidMap() {
-    $pid = islandora_cdm_api_map_to_pid('mycoll', '1');
+    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '1');
     $this->assertEqual('islandora:330', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '1')), 'Function');
 
-    $pid = islandora_cdm_api_map_to_pid('mycoll', '2');
+    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '2');
     $this->assertEqual('islandora:314', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '2')), 'Function');
 
-    $pid = islandora_cdm_api_map_to_pid('mycoll', '3');
+    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '3');
     $this->assertEqual('islandora:211', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '3')), 'Function');
 
-    $pid = islandora_cdm_api_map_to_pid('mycoll', '4');
+    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '4');
     $this->assertEqual('islandora:321', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '4')), 'Function');
 
-    $pid = islandora_cdm_api_map_to_pid('mycoll', '5');
+    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '5');
     $this->assertEqual('islandora:345', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '5')), 'Function');
   }
 
