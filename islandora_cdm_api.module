@@ -108,7 +108,7 @@ function islandora_cdm_api_router() {
       return $not_recognized_message;
   }
 
-  // The string we want is the only key in 
+  // The string we want is the only key ('c') in the query.
   $query_string = $query['c'];
   $params = explode('/', $query_string);
   // Get the first item after the question mark and pass the remainder
@@ -175,18 +175,21 @@ function islandora_cdm_api_dmgetcollectionparameters($params) {
 
 function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
   // $alias, $pointer, $format
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetCompoundObjectInfo', $params);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetimageinfo($params) {
   // $alias, $pointer, $format
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetImageInfo', $params);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_dmgetiteminfo($params) {
   // $alias, $pointer, $format
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetItemInfo', $params);
   drupal_json_output($data);
 }
@@ -199,12 +202,14 @@ function islandora_cdm_api_dmquery($params) {
 
 function islandora_cdm_api_getitemdmmodified($params) {
   // $alias, $pointer, $format
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetItemDmmodified', $params);
   drupal_json_output($data);
 }
 
 function islandora_cdm_api_getparent($params) {
   // $alias, $pointer, $format
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetParent', $params);
   drupal_json_output($data);
 }
@@ -218,6 +223,7 @@ function islandora_cdm_api_getparent($params) {
 
 function islandora_cdm_api_getfile($params) {
   // $alias, $pointer, $format, $filename
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetFile', $params);
   drupal_json_output($data);
 }
@@ -230,12 +236,14 @@ function islandora_cdm_api_getimage() {
   drupal_json_output(array('Request' => 'GetImage') + $data);
 }
 
-function islandora_cdm_api_getstream($alias = 'foo', $pointer = 'bar') {
+function islandora_cdm_api_getstream($alias = '', $pointer = '') {
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
   $data = array('GetStream', $alias, $pointer);
   drupal_json_output($data);
 }
 
-function islandora_cdm_api_getthumbnail($alias = 'foo', $pointer = 'bar') {
+function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
+  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
   $data = array('GetThumbnail', $alias, $pointer);
   drupal_json_output(array('Request' => 'getthumbnail') + $data);
 }
@@ -262,7 +270,9 @@ function islandora_cdm_api_map_request_to_pid($alias, $pointer) {
   }
 
   /*
-  A file_get_contents() query to http://192.168.56.101:8080/solr/select?version=1.2&wt=json&json.nl=map&q=dc.identifier:%22http://content.lib.sfu.ca/cdm/ref/collection/dkb/id/132%22 will return the description for that item, and $response->response->docs[0]->PID will get the PID.
+  A file_get_contents() query to http://192.168.56.101:8080/solr/select?version=1.2&wt=json&json.nl=map&q=dc.identifier:%22http://content.lib.sfu.ca/cdm/ref/collection/dkb/id/132%22 will return the description for that item, and $response->response->docs[0]->PID will get the PID. Using drupal_http_request(), the code to get the PID would be $result->request->response->docs[0]->PID.
+
+  Solr host URL is in variable_get('islandora_solr_url', 'http://localhost:8080/solr');
   */
 }
 
