@@ -86,7 +86,7 @@ function islandora_cdm_api_admin_settings() {
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => variable_get('islandora_cdm_api_source_cdm_url', 'http://contentdm.example.com'),
-    '#description' => t('The hostname of the CONTENTdm server that the Islandora objects were migrated from, including the "http://" or "https://" but without the trailing slash. Used in querying your objects to retrieve PIDs.'),
+    '#description' => t('The hostname of the CONTENTdm server that the Islandora objects were migrated from. Include the "http://" or "https://" but not the trailing slash.'),
     '#maxlength' => 60,
   );
   $form['islandora_cdm_api_identifier_element'] = array(
@@ -94,7 +94,7 @@ function islandora_cdm_api_admin_settings() {
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => variable_get('islandora_cdm_api_identifier_element', 'dc.identifier'),
-    '#description' => t('The element to specify in the Solr query.'),
+    '#description' => t('The element to specify in the Solr query to find CONTENTdm reference URLs.'),
     '#maxlength' => 60,
   );
   return system_settings_form($form);
