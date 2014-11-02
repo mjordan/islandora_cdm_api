@@ -11,7 +11,7 @@
 function islandora_cdm_api_menu() {
   $items = array();
   $items['admin/islandora/tools/cdm_api'] = array(
-    'title' => 'CONTENTdm API',
+    'title' => 'CONTENTdm API Provider',
     'description' => 'Configure the Islandora CONTENTdm API module.',
     'page callback' => 'drupal_get_form',
     'access arguments' => array('administer site configuration'),
@@ -24,7 +24,7 @@ function islandora_cdm_api_menu() {
   // To get around this, we consider everything in the incoming request's
   // query (?c=) to be a single string that we parse to get the "parameters".
   $items['cdm_api'] = array(
-    'title' => 'CONTENTdm API Provider',
+    'title' => 'CONTENTdm API',
     'description' => '',
     'page callback' => 'islandora_cdm_api_router',
     'access arguments' => array('access contentdm api'),
