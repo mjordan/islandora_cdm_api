@@ -81,15 +81,22 @@ function islandora_cdm_api_permission() {
  */
 function islandora_cdm_api_admin_settings() {
   $form = array();
-  $form['islandora_cdm_api_test'] = array(
-    '#title' => t('Your name please'),
+  $form['islandora_cdm_api_source_cdm_url'] = array(
+    '#title' => t('Source CONTENTdm server hostname'),
     '#type' => 'textfield',
     '#size' => 60,
-    // '#default_value' => variable_get('islandora_cdm_ap_some_setting', 'Mark'),
-    '#description' => t("What's your name."),
-    '#maxlength' => 255,
+    '#default_value' => variable_get('islandora_cdm_api_source_cdm_url', 'http://contentdm.example.com'),
+    '#description' => t('The hostname of the CONTENTdm server that the Islandora objects were migrated from, including the "http://" or "https://" but without the trailing slash. Used in querying your objects to retrieve PIDs.'),
+    '#maxlength' => 60,
   );
-
+  $form['islandora_cdm_api_identifier_element'] = array(
+    '#title' => t('Identifier element'),
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => variable_get('islandora_cdm_api_identifier_element', 'dc.identifier'),
+    '#description' => t('The element to specify in the Solr query.'),
+    '#maxlength' => 60,
+  );
   return system_settings_form($form);
 }
 
@@ -250,29 +257,29 @@ function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
 
 /**
  * Return the PID of the Islandora object corresponding to the alias and pointer.
- * During development, we do this using data from a tab-delimited file, but later
- * we will look up a value in the MODS or other metadata via a Solr query as illustrated
- * in the comment below.
+ * Performs a query to Islandora's Solr index to get the PID.
  *
  * @param string $alias
  *   The CONTENTdm collection alias
  * @param string $pointer
  *   The CONENTdm object pointer
  */
-function islandora_cdm_api_map_request_to_pid($alias, $pointer) {
-  $test_data_path = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/pidmap.txt';
-  $records = file($test_data_path);
-  foreach ($records as $record) {
-    list($a, $p, $pid) = explode("\t", trim($record));
-    if (($a == $alias) && ($p == $pointer)) {
-      return $pid;
-    }
+function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
+  $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
+  $source_cdm_server_url = variable_get('islandora_cdm_api_source_cdm_url', 'http://contentdm.example.com');
+  $target_element = variable_get('islandora_cdm_api_identifier_element', 'dc.identifier');
+  $pid_query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $target_element . ':' .
+    '%22' . $source_cdm_server_url . '/cdm/ref/collection/' . $alias . '/id/' . $pointer . '%22';
+  debug($pid_query);
+  $raw_result = drupal_http_request($pid_query);
+  if ($raw_result->code != 200) {
+    return FALSE;
   }
-
-  /*
-  A file_get_contents() query to http://192.168.56.101:8080/solr/select?version=1.2&wt=json&json.nl=map&q=dc.identifier:%22http://content.lib.sfu.ca/cdm/ref/collection/dkb/id/132%22 will return the description for that item, and $response->response->docs[0]->PID will get the PID. Using drupal_http_request(), the code to get the PID would be $result->request->response->docs[0]->PID.
-
-  Solr host URL is in variable_get('islandora_solr_url', 'http://localhost:8080/solr');
-  */
+  $query_result = json_decode($raw_result->data);
+  if ($query_result->response->numFound < 1) {
+    return FALSE;
+  } 
+  // If more than one object was found, take the PID of the first one.
+  return $query_result->response->docs[0]->PID;
 }
 
