@@ -1,4 +1,4 @@
-name = Islandora CONTENTdm API
+name = Islandora CONTENTdm API Provider
 description = "Provides a Web Services API compatible with applications that use the CONTENTdm Web API."
 package = Islandora Tools
 version = 7.x-dev

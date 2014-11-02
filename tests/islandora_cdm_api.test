@@ -9,7 +9,7 @@ class IslandoraCdmApiTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Islandora CONTENTdm API tests',
+      'name' => 'Islandora CONTENTdm API Provider tests',
       'description' => 'Various tests for the Islandora CONTENTdm API module.',
       'group' => 'Islandora CONTENTdm API',
     );
