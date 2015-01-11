@@ -28,7 +28,7 @@ For the Islandora CONTENTdm API to work, the following conditions must be in pla
 
 ![How the Islandora CONTENTdm API module works](https://dl.dropboxusercontent.com/u/1015702/linked_to/IslandoraCONTENTdmAPIModuleActivityDiagram.png)
 
-We need to use 'c' as the query parameter in the API URLs because 'q' is used by Drupal, even with clean URLs enabled.
+We need to use 'c' as the query parameter in the API URLs because 'q' is used by Drupal for its parameter(s), even with clean URLs enabled.
 
 ## Installation
 

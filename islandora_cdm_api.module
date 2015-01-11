@@ -23,6 +23,7 @@ function islandora_cdm_api_menu() {
   // https://api.drupal.org/api/drupal/includes!menu.inc/constant/MENU_MAX_PARTS/7.
   // To get around this, we consider everything in the incoming request's
   // query (?c=) to be a single string that we parse to get the "parameters".
+  // We can't use ?q= because Drupal uses it already for its parameters..
   $items['cdm_api'] = array(
     'title' => 'CONTENTdm API',
     'description' => '',
@@ -251,8 +252,14 @@ function islandora_cdm_api_getstream($alias = '', $pointer = '') {
 
 function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
-  $data = array('GetThumbnail', $alias, $pointer);
-  drupal_json_output(array('Request' => 'getthumbnail') + $data);
+  // $data = array('GetThumbnail', $alias, $pointer);
+  // drupal_json_output(array('Request' => 'getthumbnail') + $data);
+  module_load_include('inc', 'islandora', 'includes/datastream');
+  // Load the Islandora object.
+  $object = islandora_object_load($islandora_object_pid);
+  // Get its TN datastream and return its content to client.
+  $tn = $object['TN']->content;
+  islandora_download_datastream($tn);
 }
 
 /**
