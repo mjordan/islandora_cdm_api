@@ -24,7 +24,7 @@ The module is still under development but when complete will implement the follo
 For the Islandora CONTENTdm API to work, the following conditions must be in place:
 
 * Islandora will need to store the identifiers from the migrated CONTENTdm objects such that this module can query them, for example as CONTENTdm reference URLs in the Islandora objects' MODS metadata (e.g., in a dc:identifer element):
-* ```xml
+```xml
 * <mods xmlns="http://www.loc.gov/mods/v3" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Ordinary MODS elements go here -->
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100</identifier>
