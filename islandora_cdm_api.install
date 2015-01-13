@@ -16,5 +16,4 @@ function islandora_cdm_api_uninstall() {
     'islandora_checksum_checker_send_complete_message',
     'islandora_checksum_checker_log_mismatches',
   );
-  // array_walk($variables, 'variable_del');
 }
