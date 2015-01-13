@@ -308,8 +308,8 @@ function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
   // Load the Islandora object.
   $object = islandora_object_load($islandora_object_pid);
   // Get its TN datastream and return its content to client.
-  // $tn = $object['TN']->content;
-  // islandora_download_datastream($tn);
+  $tn = $object['TN']->content;
+  islandora_download_datastream($tn);
 }
 
 /**
