@@ -1,4 +1,4 @@
-# Islandora CONTENTdm API
+# Islandora CONTENTdm API [![Build Status](https://travis-ci.org/mjordan/islandora_cdm_api.png?branch=7.x)](https://travis-ci.org/mjordan/islandora_cdm_api)
 
 ## Introduction
 

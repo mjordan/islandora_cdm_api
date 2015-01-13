@@ -1,105 +1,43 @@
 <?php
+
 /**
  * @file
- * Simpletest tests against the URLs used by the Islandora CONTENTdm
- * API module.
+ * Attempts to ingest some image into a randomly generated image collection
+ * and perform lookups on their CONTENTdm URLs.
  */
-class IslandoraCdmApiTestCase extends DrupalWebTestCase {
-  protected $privileged_user;
 
+class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
+
+  /**
+   * Get test information.
+   *
+   * @see IslandoraWebTestCase::getInfo()
+   */
   public static function getInfo() {
     return array(
-      'name' => 'Islandora CONTENTdm API Provider tests',
-      'description' => 'Various tests for the Islandora CONTENTdm API module.',
+      'name' => 'CONTENTdm API tests',
+      'description' => 'Tests basic functionality of the Islandora CONTENTdm API',
       'group' => 'Islandora CONTENTdm API',
     );
   }
 
-  public function setUp() {
-    parent::setUp(array('islandora_cdm_api'));
-    variable_set('islandora_cdm_api_source_cdm_url', 'http://content.lib.sfu.ca');
-    variable_set('islandora_cdm_api_identifier_element', 'dc.identifier');
-    $this->privileged_user = $this->drupalCreateUser(array(
-      'access contentdm api',
-    ));
-    $this->drupalLogin($this->privileged_user);
-  }
-
   /**
-   * Note that this test is specific to Mark's Islandora dev environment.
+   * Set up the test environment.
+   *
+   * @see IslandoraWebTestCase::setUp()
    */
-  public function testIslandoraCONTENTdmAPIPidMap() {
-    $pid = islandora_cdm_api_map_request_to_pid('ctimes', '10');
-    $this->assertEqual('islandora:103', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'ctimes', '@pointer' => '10')), 'Function');
-
-    $pid = islandora_cdm_api_map_request_to_pid('mycoll', '5');
-    $this->assertEqual('islandora:345', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'mycoll', '@pointer' => '5')), 'Function');
-
-    $pid = islandora_cdm_api_map_request_to_pid('dkb', '132');
-    $this->assertEqual('islandora:346', $pid, format_string("Pid @pid matches alias @alias / pointer @pointer", array('@pid' => $pid, '@alias' => 'dkb', '@pointer' => '132')), 'Function');
+  public function setUp() {
+    parent::setUp(array(
+      'islandora',
+      'islandora_basic_image',
+      'islandora_basic_collection',
+      'islandora_cdm_api',
+    ));
   }
 
   /**
-   * We need to use url() when within Simpletest when testing URLs that have query parameters.
-   */ 
-  public function testIslandoraCONTENTdmAPIget() {
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionsList/json'))));
-    $this->assertResponse(200, 'User can access dmGetCollectionsList');
-    $this->assertText('dmGetCollectionsList', "'dmGetCollectionsList' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetDublinCoreFieldInfo/json'))));
-    $this->assertResponse(200, 'User can access dmGetDublinCoreFieldInfo');
-    $this->assertText('dmGetDublinCoreFieldInfo', "'dmGetDublinCoreFieldInfo' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionFieldInfo/foo/json'))));
-    $this->assertResponse(200, 'User can access dmGetCollectionFieldInfo');
-    $this->assertText('dmGetCollectionFieldInfo', "'dmGetCollectionFieldInfo' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCollectionParameters/bar/json'))));
-    $this->assertResponse(200, 'User can access dmGetCollectionParameters');
-    $this->assertText('dmGetCollectionParameters', "'dmGetCollectionParameters' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetCompoundObjectInfo/foo/10json'))));
-    $this->assertResponse(200, 'User can access dmGetCompoundObjectInfo');
-    $this->assertText('dmGetCompoundObjectInfo', "'dmGetCompoundObjectInfo' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetImageInfo/bar/100/json'))));
-    $this->assertResponse(200, 'User can access dmGetImageInfo');
-    $this->assertText('dmGetImageInfo', "'dmGetImageInfo' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'dmGetItemInfo/baz/200/json'))));
-    $this->assertResponse(200, 'User can access dmGetItemInfo');
-    $this->assertText('dmGetItemInfo', "'dmGetItemInfo' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE,
-      'query' => array('c' => 'dmQuery/foo/all^hello^all^and/all/date/1024/1/1/0/0/0/0/0/json'))
-    ));
-    $this->assertResponse(200, 'User can access dmQuery');
-    $this->assertText('dmQuery', "'dmQuery' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'GetItemDmmodified/foo/123/json'))));
-    $this->assertResponse(200, 'User can access GetItemDmmodified');
-    $this->assertText('GetItemDmmodified', "'GetItemDmmodified' (JSON) test successful.");
-
-    $this->drupalGet(url('cdm_api', array('absolute' => TRUE, 'query' => array('c' => 'GetParent/bar/598/json'))));
-    $this->assertResponse(200, 'User can access GetParent');
-    $this->assertText('GetParent', "'GetParent' (JSON) test successful.");
-
-    $this->drupalGet('cdm_api/utils/getfile/collection/foo/id/10/filename/foo.jpg');
-    $this->assertResponse(200, 'User can access GetFile');
-    $this->assertText('GetFile', "'GetFile' (JSON) test successful.");
-
-    $this->drupalGet('cdm_api/utils/ajaxhelper/?CISOROOT=foo&CISOPTR=10&action=2&DMSCALE=100&DMWIDTH=1000o&DMHEIGHT=100');
-    $this->assertResponse(200, 'User can access GetImage');
-    $this->assertText('GetImage', "'GetImage' (JSON) test successful.");
-
-    $this->drupalGet('cdm_api/utils/getstream/collection/foo/id/10');
-    $this->assertResponse(200, 'User can access GetStream');
-    $this->assertText('GetStream', "'GetStream' (JSON) test successful.");
-
-    $this->drupalGet('cdm_api/utils/getthumbnail/collection/foo/id/10');
-    $this->assertResponse(200, 'User can access GetThumbnail');
-    $this->assertText('GetThumbnail', "'GetThumbnail' (JSON) test successful.");
+   * Ingests objects that we use in our CONTENTdm API tests.
+   */
+  public function testIngestImages() {
   }
 }
-
