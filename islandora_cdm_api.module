@@ -20,10 +20,11 @@ function islandora_cdm_api_menu() {
   );
   // We can't use ordinary menu paths for most of the CONTENTdm API URLs
   // because Drupal menu paths have a maximum of 9 path segments. See
-  // https://api.drupal.org/api/drupal/includes!menu.inc/constant/MENU_MAX_PARTS/7.
-  // To get around this, we consider everything in the incoming request's
-  // query (?c=) to be a single string that we parse to get the "parameters".
-  // We can't use ?q= because Drupal uses it already for its parameters..
+  // https://api.drupal.org/api/drupal/includes!menu.inc/constant/
+  // MENU_MAX_PARTS/7. To get around this, we consider everything in
+  // the incoming request's query (?c=) to be a single string that we
+  // parse to get the "parameters". We can't use ?q= because Drupal uses
+  // it already for its parameters..
   $items['cdm_api'] = array(
     'title' => 'CONTENTdm API',
     'description' => '',
@@ -102,6 +103,8 @@ function islandora_cdm_api_admin_settings() {
 }
 
 /**
+ * Routes from query string values to functions.
+ *
  * Grabs the query string from the request and passes it off to the appropriate
  * function. We need to use a query string instead of menu path elements since
  * Drupal 7 only allows 9 of these, and dmQuery requires more than that. See
@@ -113,7 +116,7 @@ function islandora_cdm_api_router() {
   $not_recognized_message = t('Your request to the CONTENTdm API was not recognized.');
   $query = drupal_get_query_parameters();
   if (!count($query)) {
-      return $not_recognized_message;
+    return $not_recognized_message;
   }
 
   // The string we want is the only key ('c') in the query.
@@ -127,96 +130,139 @@ function islandora_cdm_api_router() {
     case 'dmGetCollectionsList':
       islandora_cdm_api_dmgetcollectionslist($params);
       break;
+
     case 'dmGetDublinCoreFieldInfo':
       islandora_cdm_api_dmgetdublincorefieldinfo($params);
       break;
+
     case 'dmGetCollectionFieldInfo':
       islandora_cdm_api_dmgetcollectionfieldinfo($params);
       break;
+
     case 'dmGetCollectionParameters':
       islandora_cdm_api_dmgetcollectionparameters($params);
       break;
+
     case 'dmGetCompoundObjectInfo':
       islandora_cdm_api_dmgetcompoundobjectinfo($params);
       break;
+
     case 'dmGetImageInfo':
       islandora_cdm_api_dmgetimageinfo($params);
       break;
+
     case 'dmGetItemInfo':
       islandora_cdm_api_dmgetiteminfo($params);
       break;
+
     case 'dmQuery':
       islandora_cdm_api_dmquery($params);
       break;
+
     case 'GetItemDmmodified':
       islandora_cdm_api_getitemdmmodified($params);
       break;
+
     case 'GetParent':
       islandora_cdm_api_getparent($params);
       break;
+
     default:
       return $not_recognized_message;
   }
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetcollectionslist($params) {
   $data = array('dmGetCollectionsList', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetdublincorefieldinfo($params) {
   $data = array('dmGetDublinCoreFieldInfo', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetcollectionfieldinfo($params) {
-  // $alias, $format
+  // $alias, $format.
   $data = array('dmGetCollectionFieldInfo', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetcollectionparameters($params) {
-  // $alias, $format
+  // $alias, $format.
   $data = array('dmGetCollectionParameters', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
-  // $alias, $pointer, $format
+  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetCompoundObjectInfo', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetimageinfo($params) {
-  // $alias, $pointer, $format
+  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetImageInfo', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmgetiteminfo($params) {
-  // $alias, $pointer, $format
+  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('dmGetItemInfo', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_dmquery($params) {
-  // $alias = '', $searchstrings = '', $fields = '', $sortby = '', $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0', $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0', $format = 'json'
+  // $alias = '', $searchstrings = '', $fields = '', $sortby = '',
+  // $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0',
+  // $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0',
+  // $format = 'json'.
   $data = array('dmQuery', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_getitemdmmodified($params) {
-  // $alias, $pointer, $format
+  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetItemDmmodified', $params);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_getparent($params) {
-  // $alias, $pointer, $format
+  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetParent', $params);
   drupal_json_output($data);
@@ -229,14 +275,19 @@ function islandora_cdm_api_getparent($params) {
  islandora_download_datastream($datastream);
 */
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_getfile($params) {
-  // $alias, $pointer, $format, $filename
+  // $alias, $pointer, $format, $filename.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   $data = array('GetFile', $params);
   drupal_json_output($data);
 }
 
 /**
+ * CONTENTdm API callback.
+ *
  * GetImage uses $_GET, not menu arguments.
  */
 function islandora_cdm_api_getimage() {
@@ -244,29 +295,36 @@ function islandora_cdm_api_getimage() {
   drupal_json_output(array('Request' => 'GetImage') + $data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_getstream($alias = '', $pointer = '') {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
   $data = array('GetStream', $alias, $pointer);
   drupal_json_output($data);
 }
 
+/**
+ * CONTENTdm API callback.
+ */
 function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
   $data = array('GetThumbnail', $alias, $pointer);
   drupal_json_output(array('Request' => 'getthumbnail') + $data);
-/*
+  /*
   module_load_include('inc', 'islandora', 'includes/datastream');
   // Load the Islandora object.
   $object = islandora_object_load($islandora_object_pid);
   // Get its TN datastream and return its content to client.
   $tn = $object['TN']->content;
   islandora_download_datastream($tn);
-*/
+  */
 }
 
 /**
- * Return the PID of the Islandora object corresponding to the alias and pointer.
- * Performs a query to Islandora's Solr index to get the PID.
+ * Performs a query to Islandora's Solr index to get a PID.
+ *
+ * The object is the one corresponding to the alias and pointer.
  *
  * @param string $alias
  *   The CONTENTdm collection alias
@@ -286,8 +344,7 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $query_result = json_decode($raw_result->data);
   if ($query_result->response->numFound < 1) {
     return FALSE;
-  } 
+  }
   // If more than one object was found, take the PID of the first one.
   return $query_result->response->docs[0]->PID;
 }
-
