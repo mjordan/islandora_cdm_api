@@ -39,7 +39,7 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   /**
    * Ingests objects that we use in our CONTENTdm API tests.
    */
-  public function testIngestImages() {
+  public function testIngestObjects() {
     // Attempts to create collection.
     $collection_pid = 'islandora%3Acdm_api_test_collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
@@ -76,5 +76,10 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
       $mods_path = $this->url . '/datastream/MODS/view';
       $this->assertLinkByHref($mods_path);
     }
+  }
+
+  public function testGetCollectionList() {
+    $this->drupalGet('cdm_api?c=dmGetCollectionsList/json');
+    $this->assertResponse(200);
   }
 }
