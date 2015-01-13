@@ -252,14 +252,16 @@ function islandora_cdm_api_getstream($alias = '', $pointer = '') {
 
 function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
-  // $data = array('GetThumbnail', $alias, $pointer);
-  // drupal_json_output(array('Request' => 'getthumbnail') + $data);
+  $data = array('GetThumbnail', $alias, $pointer);
+  drupal_json_output(array('Request' => 'getthumbnail') + $data);
+/*
   module_load_include('inc', 'islandora', 'includes/datastream');
   // Load the Islandora object.
   $object = islandora_object_load($islandora_object_pid);
   // Get its TN datastream and return its content to client.
   $tn = $object['TN']->content;
   islandora_download_datastream($tn);
+*/
 }
 
 /**
@@ -277,7 +279,6 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $target_element = variable_get('islandora_cdm_api_identifier_element', 'dc.identifier');
   $pid_query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $target_element . ':' .
     '%22' . $source_cdm_server_url . '/cdm/ref/collection/' . $alias . '/id/' . $pointer . '%22';
-  debug($pid_query);
   $raw_result = drupal_http_request($pid_query);
   if ($raw_result->code != 200) {
     return FALSE;
