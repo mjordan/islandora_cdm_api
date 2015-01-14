@@ -210,7 +210,6 @@ function islandora_cdm_api_dmgetcollectionparameters($params) {
  *   An array containing the alias, pointer and format from the URL.
  */
 function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
-  // $alias, $pointer, $format.
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
 }
 
@@ -221,7 +220,15 @@ function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
  *   An array containing the alias, pointer and format.
  */
 function islandora_cdm_api_dmgetimageinfo($params) {
-  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
+  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
+    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+  }
+  // Contrary to the API documentation, CONTENTdm returns this error XML
+  // if you ask for 'json'.
+  if ($params[2] == 'json') {
+    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+  }
   $object = islandora_object_load($islandora_object_pid);
   $object_cmodels = $object->relationships->get('info:fedora/fedora-system:def/model#', 'hasModel');
   // The object must have one of these content models.
@@ -250,7 +257,18 @@ function islandora_cdm_api_dmgetimageinfo($params) {
     // @todo: Figure out what to return if the info is not availble.
   }
   file_delete($image_file);
-  // @todo: Return the image info in the format indicated.
+  $xml = new XMLWriter();
+  $xml->openMemory();
+  $xml->startDocument('1.0', 'UTF-8');
+  $xml->startElement('imageinfo');
+  $xml->writeElement('filename', '');
+  $xml->writeElement('type', $info['extension']);
+  $xml->writeElement('width', $info['width']);
+  $xml->writeElement('height', $info['height']);
+  $xml->writeElement('title', $object->label);
+  $xml->endElement();
+  drupal_add_http_header('Content-Type: text/xml; utf-8');
+  print $xml->outputMemory();
 }
 
 /**
@@ -338,7 +356,9 @@ function islandora_cdm_api_getstream($alias = NULL, $pointer = NULL) {
  *   The CONTENTdm pointer.
  */
 function islandora_cdm_api_getthumbnail($alias = NULL, $pointer = NULL) {
-  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
+  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
+    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+  }
   module_load_include('inc', 'islandora', 'includes/datastream');
   // Load the Islandora object.
   $object = islandora_object_load($islandora_object_pid);
