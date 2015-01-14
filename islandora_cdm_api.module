@@ -24,17 +24,15 @@ function islandora_cdm_api_menu() {
   // MENU_MAX_PARTS/7. To get around this, we consider everything in
   // the incoming request's query (?c=) to be a single string that we
   // parse to get the "parameters". We can't use ?q= because Drupal uses
-  // it already for its parameters..
+  // it already for its parameters.
   $items['cdm_api'] = array(
     'title' => 'CONTENTdm API',
-    // 'description' => '',
     'page callback' => 'islandora_cdm_api_router',
     'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['cdm_api/utils/getfile/collection/%/id/%/filename/%'] = array(
     'title' => 'GetFile',
-    // 'description' => '',
     'page callback' => 'islandora_cdm_api_getfile',
     'page arguments' => array(4, 6, 8),
     'access arguments' => array('access contentdm api'),
@@ -42,14 +40,12 @@ function islandora_cdm_api_menu() {
   );
   $items['cdm_api/utils/ajaxhelper'] = array(
     'title' => 'GetImage',
-    // 'description' => '',
     'page callback' => 'islandora_cdm_api_getimage',
     'access arguments' => array('access contentdm api'),
     'type' => MENU_LOCAL_TASK,
   );
   $items['cdm_api/utils/getstream/collection/%/id/%'] = array(
     'title' => 'GetStream',
-    // 'description' => '',
     'page callback' => 'islandora_cdm_api_getstream',
     'page arguments' => array(4, 6),
     'access arguments' => array('access contentdm api'),
@@ -57,7 +53,6 @@ function islandora_cdm_api_menu() {
   );
   $items['cdm_api/utils/getthumbnail/collection/%/id/%'] = array(
     'title' => 'GetThumbnail',
-    // 'description' => '',
     'page callback' => 'islandora_cdm_api_getthumbnail',
     'page arguments' => array(4, 6),
     'access arguments' => array('access contentdm api'),
@@ -96,7 +91,7 @@ function islandora_cdm_api_admin_settings() {
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => variable_get('islandora_cdm_api_identifier_element', 'dc.identifier'),
-    '#description' => t('The element to specify in the Solr query to find CONTENTdm reference URLs.'),
+    '#description' => t('The element to specify in the Solr query to find CONTENTdm reference URLs. MODS <identifier> elements get mapped to dc.identifer automatically, so if your MODS stores the CONTENTdm reference URLs there, use dc.identifier.'),
     '#maxlength' => 60,
   );
   return system_settings_form($form);
@@ -302,13 +297,11 @@ function islandora_cdm_api_getstream($alias = '', $pointer = '') {
  */
 function islandora_cdm_api_getthumbnail($alias = '', $pointer = '') {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
-  $data = array('GetThumbnail', $alias, $pointer);
-  drupal_json_output(array('Request' => 'getthumbnail') + $data);
   module_load_include('inc', 'islandora', 'includes/datastream');
   // Load the Islandora object.
   $object = islandora_object_load($islandora_object_pid);
   // Get its TN datastream and return its content to client.
-  $tn = $object['TN']->content;
+  $tn = islandora_datastream_load('TN', $object);
   islandora_download_datastream($tn);
 }
 

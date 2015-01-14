@@ -79,10 +79,14 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
-   * Tests API calls.
+   * Tests getthumbnail API call.
    */
-  public function testGetCollectionList() {
-    $this->drupalGet('cdm_api?c=dmGetCollectionsList/json');
+  public function testGetThumbnail() {
+    $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
+    $this->assertResponse(200);
+    $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll2/id/200');
+    $this->assertResponse(200);
+    $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll3/id/300');
     $this->assertResponse(200);
   }
 }
