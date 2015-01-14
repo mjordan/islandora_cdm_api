@@ -79,14 +79,26 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
+   * Tests dmgetimageinfo API call.
+   */
+  public function testDmGetImageInfo() {
+    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll1/100/xml');
+    $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
+    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll2/200/xml');
+    $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
+    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll3/300/xml');
+    $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
+  }
+
+  /**
    * Tests getthumbnail API call.
    */
   public function testGetThumbnail() {
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
-    $this->assertResponse(200);
+    $this->assertResponse(200, 'Response OK');
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll2/id/200');
-    $this->assertResponse(200);
+    $this->assertResponse(200, 'Response OK');
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll3/id/300');
-    $this->assertResponse(200);
+    $this->assertResponse(200, 'Response OK');
   }
 }
