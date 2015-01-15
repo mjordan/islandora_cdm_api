@@ -47,6 +47,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'manage object properties',
       'delete fedora objects and datastreams',
       'create child collection',
+      'access contentdm api',
     ));
     $this->drupalLogin($user);
 
@@ -90,17 +91,9 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertResponse(200, 'Response to MODS path is OK');
       $this->assertPattern('|titleInfo|');
     }
-  }
-
-  /**
-   * Tests dmGetDublinCoreFieldInfo API call.
-   */
-  public function testdmGetDublinCoreFieldInfo() {
-    $user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
-    $this->drupalLogin($user);
 
     $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/xml');
-    $this->assertResponse(401, 'Unauthorized');
+    $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|<name>Title</name>|');
 
     $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/json');
