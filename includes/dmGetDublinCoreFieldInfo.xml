@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+<field>
+  <name>Title</name>
+  <nick>title</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Subject</name>
+  <nick>subjec</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Description</name>
+  <nick>descri</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Creator</name>
+  <nick>creato</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Publisher</name>
+  <nick>publis</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Contributors</name>
+  <nick>contri</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date</name>
+  <nick>date</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Type</name>
+  <nick>type</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Format</name>
+  <nick>format</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Identifier</name>
+  <nick>identi</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Source</name>
+  <nick>source</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Language</name>
+  <nick>langua</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation</name>
+  <nick>relati</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Coverage</name>
+  <nick>covera</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Rights</name>
+  <nick>rights</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Audience</name>
+  <nick>audien</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Accrual Method</name>
+  <nick>accrua</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Accrual Periodicity</name>
+  <nick>accrub</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Accrual Policy</name>
+  <nick>accruc</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Instructional Method</name>
+  <nick>instru</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Provenance</name>
+  <nick>proven</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Title-Alternative</name>
+  <nick>titlea</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Description-Table Of Contents</name>
+  <nick>descria</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Description-Abstract</name>
+  <nick>describ</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Created</name>
+  <nick>datea</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Valid</name>
+  <nick>dateb</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Available</name>
+  <nick>datec</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Issued</name>
+  <nick>dated</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Modified</name>
+  <nick>datee</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Accepted</name>
+  <nick>datef</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Copyrighted</name>
+  <nick>dateg</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Date-Submitted</name>
+  <nick>dateh</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Format-Extent</name>
+  <nick>formata</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Format-Medium</name>
+  <nick>formatb</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Identifier-Bibliographic Citation</name>
+  <nick>identia</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Version Of</name>
+  <nick>relatia</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Has Version</name>
+  <nick>relatib</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Replaced By</name>
+  <nick>relatic</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Replaces</name>
+  <nick>relatid</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Required By</name>
+  <nick>relatie</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Requires</name>
+  <nick>relatif</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Part Of</name>
+  <nick>relatig</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Has Part</name>
+  <nick>relatih</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Referenced By</name>
+  <nick>relatii</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-References</name>
+  <nick>relatij</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Is Format Of</name>
+  <nick>relatik</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Has Format Of</name>
+  <nick>relatil</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Relation-Conforms To</name>
+  <nick>relatim</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Rights-Access Rights</name>
+  <nick>rightsa</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Rights-License</name>
+  <nick>rightsb</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Rights-Rights Holder</name>
+  <nick>rightsc</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Coverage-Spatial</name>
+  <nick>coveraa</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Coverage-Temporal</name>
+  <nick>coverab</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Audience-Mediator</name>
+  <nick>audiena</nick>
+  <type>TEXT</type>
+</field>
+<field>
+  <name>Audience-Education Level</name>
+  <nick>audienb</nick>
+  <type>TEXT</type>
+</field>
+</fields>

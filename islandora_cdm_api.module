@@ -183,6 +183,19 @@ function islandora_cdm_api_dmgetcollectionslist($params) {
  *   An array containing the format.
  */
 function islandora_cdm_api_dmgetdublincorefieldinfo($params) {
+  $path = drupal_get_path('module', 'islandora_cdm_api');
+  if ($params[0] == 'xml') {
+    $path_to_file = $path . '/includes/dmGetDublinCoreFieldInfo.xml';
+    $xml = file_get_contents($path_to_file);
+    drupal_add_http_header('Content-Type: text/xml; utf-8');
+    print $xml;
+  }
+  if ($params[0] == 'json') {
+    $path_to_file = $path . '/includes/dmGetDublinCoreFieldInfo.json';
+    $json = file_get_contents($path_to_file);
+    drupal_add_http_header('Content-Type: application/json; utf-8');
+    print $json;
+  }
 }
 
 /**

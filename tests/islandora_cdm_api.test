@@ -79,6 +79,17 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
+   * Tests dmGetDublinCoreFieldInfo API call.
+   */
+  public function testdmGetDublinCoreFieldInfo() {
+    $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/xml');
+    $this->assertPattern('|<name>Title</name>|');
+
+    $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/json');
+    $this->assertPattern('|"name":"Title"|');
+  }
+
+  /**
    * Tests GetItemDmmodified API call.
    */
   public function testGetItemDmmodified() {
