@@ -7,4 +7,3 @@ configure = admin/islandora/tools/cdm_api
 dependencies[] = islandora
 dependencies[] = islandora_solr
 files[] = tests/islandora_cdm_api.test
-testing_api = 2.x

@@ -6,7 +6,7 @@
  * and perform lookups on their CONTENTdm URLs.
  */
 
-class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
+class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
 
   /**
    * Get test information.
