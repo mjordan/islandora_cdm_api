@@ -346,11 +346,26 @@ function islandora_cdm_api_getparent($params) {
 /**
  * CONTENTdm API callback.
  *
- * @param array $params
- *   An array containing the alias, pointer and filename.
+ * @param string $alias
+ *   The CONTENTdm alias.
+ * @param string $pointer
+ *   The CONTENTdm pointer.
+ * @param string $filename
+ *   The filename that will be used to for the downloaded file.
+ *
+ * @todo: Which DSID do we choose if the object has no OBJ?
  */
-function islandora_cdm_api_getfile($params) {
-  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+function islandora_cdm_api_getfile($alias, $pointer, $filename) {
+  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
+  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
+    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+  }
+  $object = islandora_object_load($islandora_object_pid);
+  if (isset($object['OBJ'])) {
+    drupal_add_http_header('Content-Type: Application/octet-stream');
+    drupal_add_http_header('Content-description: ' . $filename);
+    print $object['OBJ']->content;
+  }
 }
 
 /**
@@ -370,7 +385,7 @@ function islandora_cdm_api_getimage() {
  * @param string $pointer
  *   The CONTENTdm pointer.
  */
-function islandora_cdm_api_getstream($alias = NULL, $pointer = NULL) {
+function islandora_cdm_api_getstream($alias, $pointer) {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
 }
 
@@ -382,7 +397,7 @@ function islandora_cdm_api_getstream($alias = NULL, $pointer = NULL) {
  * @param string $pointer
  *   The CONTENTdm pointer.
  */
-function islandora_cdm_api_getthumbnail($alias = NULL, $pointer = NULL) {
+function islandora_cdm_api_getthumbnail($alias, $pointer) {
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
   }

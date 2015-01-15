@@ -140,4 +140,24 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
     $header3 = $this->drupalGetHeader('Content-Type');
     $this->assertEqual($header3, 'image/jpeg', 'Content-Type header on thumbnail is image/jpeg');
   }
+
+  /**
+   * Tests getfile utility call.
+   */
+  public function testGetfile() {
+    $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/foo.jpg');
+    $this->assertResponse(200, 'Response OK');
+    $header1 = $this->drupalGetHeader('Content-Type');
+    $this->assertEqual($header1, 'Application/octet-stream');
+
+    $this->drupalGet('cdm_api/utils/getfile/collection/testcoll2/id/200/filename/foo.jpg');
+    $this->assertResponse(200, 'Response OK');
+    $header2 = $this->drupalGetHeader('Content-Type');
+    $this->assertEqual($header2, 'Application/octet-stream');
+
+    $this->drupalGet('cdm_api/utils/getfile/collection/testcoll3/id/300/filename/foo.jpg');
+    $this->assertResponse(200, 'Response OK');
+    $header3 = $this->drupalGetHeader('Content-Type');
+    $this->assertEqual($header3, 'Application/octet-stream');
+  }
 }
