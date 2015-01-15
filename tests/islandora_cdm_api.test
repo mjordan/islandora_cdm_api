@@ -136,7 +136,7 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
     $this->assertEqual($header2, 'image/jpeg', 'Content-Type header on thumbnail is image/jpeg');
 
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll3/id/300');
-    $this->assertResponse(300, 'Response OK');
+    $this->assertResponse(200, 'Response OK');
     $header3 = $this->drupalGetHeader('Content-Type');
     $this->assertEqual($header3, 'image/jpeg', 'Content-Type header on thumbnail is image/jpeg');
   }
