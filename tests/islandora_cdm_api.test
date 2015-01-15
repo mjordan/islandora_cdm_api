@@ -96,8 +96,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->drupalLogin($user);
 
     $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/xml');
-    $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|name.Title./name.|');
+    $this->assertResponse(403, 'Forbidden');
+    $this->assertPattern('|<name>Title</name>|');
 
     $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/json');
     $this->assertResponse(200, 'Response OK');
