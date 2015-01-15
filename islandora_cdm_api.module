@@ -16,7 +16,7 @@ function islandora_cdm_api_menu() {
     'page callback' => 'drupal_get_form',
     'access arguments' => array('administer site configuration'),
     'page arguments' => array('islandora_cdm_api_admin_settings'),
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
   );
   // We can't use ordinary menu paths for most of the CONTENTdm API URLs
   // because Drupal menu paths have a maximum of 9 path segments. See
@@ -29,34 +29,34 @@ function islandora_cdm_api_menu() {
     'title' => 'CONTENTdm API',
     'page callback' => 'islandora_cdm_api_router',
     'access arguments' => array('access contentdm api'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   $items['cdm_api/utils/getfile/collection/%/id/%/filename/%'] = array(
     'title' => 'GetFile',
     'page callback' => 'islandora_cdm_api_getfile',
     'page arguments' => array(4, 6, 8),
     'access arguments' => array('access contentdm api'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   $items['cdm_api/utils/ajaxhelper'] = array(
     'title' => 'GetImage',
     'page callback' => 'islandora_cdm_api_getimage',
     'access arguments' => array('access contentdm api'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   $items['cdm_api/utils/getstream/collection/%/id/%'] = array(
     'title' => 'GetStream',
     'page callback' => 'islandora_cdm_api_getstream',
     'page arguments' => array(4, 6),
     'access arguments' => array('access contentdm api'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   $items['cdm_api/utils/getthumbnail/collection/%/id/%'] = array(
     'title' => 'GetThumbnail',
     'page callback' => 'islandora_cdm_api_getthumbnail',
     'page arguments' => array(4, 6),
     'access arguments' => array('access contentdm api'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   return $items;
 }
