@@ -29,6 +29,3 @@ script:
   - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_cdm_api
   - phpcpd --names *.module,*.inc,*.test sites/all/modules/islandora_cdm_api
   - drush test-run --uri=http://localhost:8081 --debug "Islandora CONTENTdm API"
-notifications:
-  email	:
-    - mjordan@sfu.ca
