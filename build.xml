@@ -23,7 +23,7 @@
   
   <target name="php-eval" description="Use php-eval to set the code_coverage_filter_files variable">
     <exec executable="drush">
-      <arg line="php-eval &quot;variable_set('code_coverage_files', array('sites/all/modules/islandora_cdm_api/islandora_cdm_api.module')); variable_set('code_coverage_modules', array());&quot;"/>
+      <arg line="php-eval &quot;variable_set('code_coverage_files', array('sites/all/modules/islandora_cdm_api/islandora_cdm_api.module', 'sites/all/modules/islandora_cdm_api/islandora_cdm_api.install', 'sites/all/modules/islandora_cdm_api/includes/utilities.inc', 'sites/all/modules/islandora_cdm_api/tests/islandora_cdm_api.test')); variable_set('code_coverage_modules', array());&quot;"/>
     </exec>
   </target>
 
