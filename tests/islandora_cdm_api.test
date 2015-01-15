@@ -34,7 +34,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'islandora_solr',
       'islandora_cdm_api',
     ));
+  }
 
+  /**
+   * Ingests objects that we use in our CONTENTdm API tests.
+   */
+  public function testIngestObjects() {
     $user = $this->drupalCreateUser(array(
       'view fedora repository objects',
       'ingest fedora objects',
@@ -42,15 +47,9 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'manage object properties',
       'delete fedora objects and datastreams',
       'create child collection',
-      'access contentdm api',
     ));
     $this->drupalLogin($user);
-  }
 
-  /**
-   * Ingests objects that we use in our CONTENTdm API tests.
-   */
-  public function testIngestObjects() {
     // Attempts to create collection.
     $collection_pid = 'islandora%3Acdm_api_test_collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
@@ -93,6 +92,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Tests dmGetDublinCoreFieldInfo API call.
    */
   public function testdmGetDublinCoreFieldInfo() {
+    $user = $this->drupalCreateUser(array(
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/xml');
     $this->assertPattern('|<name>Title</name>|');
 
@@ -104,6 +108,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Tests GetItemDmmodified API call.
    */
   public function testGetItemDmmodified() {
+    $user = $this->drupalCreateUser(array(
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll1/100/json');
     $this->assertPattern('|\d\d\d\d\|', 'Date is present');
 
@@ -122,6 +131,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Tests dmGetImageInfo API call.
    */
   public function testDmGetImageInfo() {
+    $user = $this->drupalCreateUser(array(
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll1/100/xml');
     $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
 
@@ -136,6 +150,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Tests GetThumbnail API call.
    */
   public function testGetThumbnail() {
+    $user = $this->drupalCreateUser(array(
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
     $this->assertResponse(200, 'Response OK');
     $header1 = $this->drupalGetHeader('Content-Type');
@@ -156,6 +175,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Tests getfile utility call.
    */
   public function testGetfile() {
+    $user = $this->drupalCreateUser(array(
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/foo.jpg');
     $this->assertResponse(200, 'Response OK');
     $header1 = $this->drupalGetHeader('Content-Type');
