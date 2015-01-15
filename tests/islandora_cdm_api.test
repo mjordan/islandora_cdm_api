@@ -40,6 +40,17 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Ingests objects that we use in our CONTENTdm API tests.
    */
   public function testIngestObjects() {
+    $user = $this->drupalCreateUser(array(
+      'view fedora repository objects',
+      'ingest fedora objects',
+      'administer site configuration',
+      'manage object properties',
+      'delete fedora objects and datastreams',
+      'create child collection',
+      'access contentdm api',
+    ));
+    $this->drupalLogin($user);
+
     // Attempts to create collection.
     $collection_pid = 'islandora%3Acdm_api_test_collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
