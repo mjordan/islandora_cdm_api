@@ -81,7 +81,7 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   /**
    * Tests GetItemDmmodified API call.
    */
-  public function testDmGetImageInfo() {
+  public function testGetItemDmmodified() {
     $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll1/100/json');
     $this->assertPattern('|\d\d\d\d\|', 'Date is present');
 
