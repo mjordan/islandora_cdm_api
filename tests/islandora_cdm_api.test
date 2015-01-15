@@ -79,7 +79,25 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
-   * Tests dmgetimageinfo API call.
+   * Tests GetItemDmmodified API call.
+   */
+  public function testDmGetImageInfo() {
+    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll1/100/json');
+    $this->assertPattern('|\d\d\d\d\|', 'Date is present');
+
+    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll2/200/json');
+    $this->assertPattern('|\d\d\d\d\|', 'Date is present');
+
+    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll3/300/json');
+    $this->assertPattern('|\d\d\d\d\|', 'Date is present');
+
+    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll3/300/xml');
+    $this->assertPattern('|Sorry,\soutput\sfor\sdmGetItemDmmodified|',
+      'XML error message is present');
+  }
+
+  /**
+   * Tests dmGetImageInfo API call.
    */
   public function testDmGetImageInfo() {
     $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll1/100/xml');
@@ -93,7 +111,7 @@ class IslandoraBasicImageIngestTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
-   * Tests getthumbnail API call.
+   * Tests GetThumbnail API call.
    */
   public function testGetThumbnail() {
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
