@@ -63,25 +63,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $path = $this->url;
       $image_path = $path . '/datastream/OBJ/view';
       $this->assertLinkByHref($image_path, 0, t('Ingested image found on view page'), t('Islandora'));
-
-      // Attempts to upload a MODS datastream for the object.
-      $mods_upload_path = $path . '/manage/datastreams/add';
-      $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
-      $mods_handle = fopen($mods_file, "r");
-      $contents = fread($mods_handle, filesize($mods_file));
-      fclose($mods_handle);
-      $edit = array(
-        'dsid' => 'MODS',
-        'label' => 'MODS record',
-        'files[file]' => $mods_file,
-      );
-      $this->drupalPost($mods_upload_path, $edit, t('Add Datastream'));
-      $mods_path = $this->url . '/datastream/MODS/view';
-      $this->assertLinkByHref($mods_path);
-
-      $this->drupalGet($mods_path);
-      $this->assertResponse(200, 'Response to MODS path is OK');
-      $this->assertPattern('|titleInfo|');
     }
   }
 }
