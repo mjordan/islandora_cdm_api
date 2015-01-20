@@ -43,9 +43,5 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
     $this->drupalLogin($user);
 
-    // Attempts to create collection.
-    $collection_pid = 'islandora%3Acdm_api_test_collection';
-    $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
-
   }
 }
