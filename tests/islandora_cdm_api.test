@@ -83,37 +83,37 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertPattern('|titleInfo|');
     }
 
-    // Test GetItemDmmodified API call.
-    $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/xml');
+    // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
+    $this->drupalGet('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/xml'));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|<name>Title</name>|');
 
-    $this->drupalGet('cdm_api?c=dmGetDublinCoreFieldInfo/json');
+    $this->drupalGet('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/json'));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|"name":"Title"|');
 
     // Test GetItemDmmodified API call.
-    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll1/100/json');
+    $this->drupalGet('cdm_api', array('c' => 'GetItemDmmodified/testcoll1/100/json'));
     $this->assertPattern('|\d\d\d\d\|', 'Date is present');
 
-    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll2/200/json');
+    $this->drupalGet('cdm_api', array('c' => 'GetItemDmmodified/testcoll2/200/json'));
     $this->assertPattern('|\d\d\d\d\|', 'Date is present');
 
-    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll3/300/json');
+    $this->drupalGet('cdm_api', array('c' => 'GetItemDmmodified/testcoll3/300/json'));
     $this->assertPattern('|\d\d\d\d\|', 'Date is present');
 
-    $this->drupalGet('cdm_api?c=GetItemDmmodified/testcoll3/300/xml');
+    $this->drupalGet('cdm_api', array('c' => 'GetItemDmmodified/testcoll3/300/xml'));
     $this->assertPattern('|Sorry,\soutput\sfor\sdmGetItemDmmodified|',
       'XML error message is present');
 
     // Test dmGetImageInfo API call.
-    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll1/100/xml');
+    $this->drupalGet('cdm_api', array('c' => 'dmGetImageInfo/testcoll1/100/xml'));
     $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
 
-    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll2/200/xml');
+    $this->drupalGet('cdm_api', array('c' => 'dmGetImageInfo/testcoll2/200/xml'));
     $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
 
-    $this->drupalGet('cdm_api?c=dmGetImageInfo/testcoll3/300/xml');
+    $this->drupalGet('cdm_api', array('c' => 'dmGetImageInfo/testcoll3/300/xml'));
     $this->assertPattern('|<width>\d+</width>|', 'Image width is present');
 
     // Test GetThumbnail API call.
