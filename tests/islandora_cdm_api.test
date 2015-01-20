@@ -84,9 +84,10 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     }
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
-    $this->drupalGetContent('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/xml'));
+    $this->drupalGet('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/xml'));
     $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|Identifier|');
+    $match = preg_match('|Identifier|', $this->drupalGetContent());
+    $this->assertTrue($match, 'Pattern |Identifier| found');
 
     $this->drupalGetContent('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/json'));
     $this->assertResponse(200, 'Response OK');
