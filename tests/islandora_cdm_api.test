@@ -50,7 +50,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $test_file_basenames = array('image1', 'image2', 'image3');
     foreach ($test_file_basenames as $basename) {
       // Attempts to create an object with an image file.
-      $path = 'islandora/object/' . $collectionpid . '/manage/overview/ingest';
+      $path = 'islandora/object/' . $collection_pid . '/manage/overview/ingest';
       $image_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.jpg';
       $image_handle = fopen($image_file, "r");
       $contents = fread($image_handle, filesize($image_file));
