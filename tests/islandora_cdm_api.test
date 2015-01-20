@@ -47,22 +47,5 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $collection_pid = 'islandora%3Acdm_api_test_collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
 
-    $test_file_basenames = array('image1', 'image2', 'image3');
-    foreach ($test_file_basenames as $basename) {
-      // Attempts to create an object with an image file.
-      $path = 'islandora/object/' . $collection_pid . '/manage/overview/ingest';
-      $image_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.jpg';
-      $image_handle = fopen($image_file, "r");
-      $contents = fread($image_handle, filesize($image_file));
-      fclose($image_handle);
-      $edit = array(
-        'files[file]' => $image_file,
-      );
-      $this->drupalPost($path, $edit, t('Ingest'));
-      $this->assertText('New Object', 'Image object was created', 'Islandora');
-      $path = $this->url;
-      $image_path = $path . '/datastream/OBJ/view';
-      $this->assertLinkByHref($image_path, 0, t('Ingested image found on view page'), t('Islandora'));
-    }
   }
 }
