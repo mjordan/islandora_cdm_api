@@ -89,6 +89,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $match = preg_match('|Identifier|', $this->drupalGetContent());
     $this->assertTrue($match, 'Pattern |Identifier| found');
 
+    watchdog('islandora_cdm_api', "drupalGetContent is: %dgc", array('%dgc' => $this->drupalGetContent()));
+
     $this->drupalGetContent('cdm_api', array('c' => 'dmGetDublinCoreFieldInfo/json'));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Identifier|');
