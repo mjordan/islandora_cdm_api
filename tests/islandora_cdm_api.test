@@ -76,9 +76,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         'files[file]' => $mods_file,
       );
       $this->drupalPost($mods_upload_path, $edit, t('Add Datastream'));
-      $mods_path = $this->url . '/datastream/MODS/view';
-      $this->assertLinkByHref($mods_path);
 
+      $mods_path = $this->url . '/datastream/MODS/view';
       $this->drupalGet($mods_path);
       $this->assertResponse(200, 'Response to MODS path is OK');
       $this->assertPattern('|titleInfo|');
