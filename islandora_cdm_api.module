@@ -280,7 +280,7 @@ function islandora_cdm_api_dmgetimageinfo($params) {
   $xml->writeElement('height', $info['height']);
   $xml->writeElement('title', $object->label);
   $xml->endElement();
-  drupal_add_http_header('Content-Type: text/xml; utf-8');
+  drupal_add_http_header('Content-Type', 'text/xml; utf-8');
   print $xml->outputMemory();
 }
 
@@ -321,7 +321,7 @@ function islandora_cdm_api_getitemdmmodified($params) {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
   }
   if ($params[2] == 'xml') {
-    drupal_add_http_header('Content-Type: text/xml; utf-8');
+    drupal_add_http_header('Content-Type', 'text/xml; utf-8');
     print '<?xml version="1.0" encoding="UTF-8"?>' .
     '<error>Sorry, output for dmGetItemDmmodified is not available in xml</error><xml>';
   }
@@ -362,8 +362,8 @@ function islandora_cdm_api_getfile($alias, $pointer, $filename) {
   }
   $object = islandora_object_load($islandora_object_pid);
   if (isset($object['OBJ'])) {
-    drupal_add_http_header('Content-Type: Application/octet-stream');
-    drupal_add_http_header('Content-description: ' . $filename);
+    drupal_add_http_header('Content-Type', 'Application/octet-stream');
+    drupal_add_http_header('Content-description', $filename);
     print $object['OBJ']->content;
   }
 }
