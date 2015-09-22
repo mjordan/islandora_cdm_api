@@ -11,9 +11,9 @@
  * The object is the one corresponding to the alias and pointer.
  *
  * @param string $alias
- *   The CONTENTdm collection alias
+ *   The CONTENTdm collection alias.
  * @param string $pointer
- *   The CONENTdm object pointer
+ *   The CONENTdm object pointer.
  */
 function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');

@@ -2,8 +2,7 @@
 
 /**
  * @file
- * Attempts to ingest some image into a randomly generated image collection
- * and perform lookups on their CONTENTdm URLs.
+ * Attempts to ingest a sample object and test the CONTENTdm API.
  */
 
 class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
@@ -151,4 +150,5 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $header3 = $this->drupalGetHeader('Content-Type');
     $this->assertEqual($header3, 'Application/octet-stream');
   }
+
 }

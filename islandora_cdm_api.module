@@ -173,7 +173,7 @@ function islandora_cdm_api_router() {
  * @param array $params
  *   An array containing the format.
  */
-function islandora_cdm_api_dmgetcollectionslist($params) {
+function islandora_cdm_api_dmgetcollectionslist(array $params) {
 }
 
 /**
@@ -182,7 +182,7 @@ function islandora_cdm_api_dmgetcollectionslist($params) {
  * @param array $params
  *   An array containing the format.
  */
-function islandora_cdm_api_dmgetdublincorefieldinfo($params) {
+function islandora_cdm_api_dmgetdublincorefieldinfo(array $params) {
   $path = drupal_get_path('module', 'islandora_cdm_api');
   if ($params[0] == 'xml') {
     $path_to_file = $path . '/includes/dmGetDublinCoreFieldInfo.xml';
@@ -204,7 +204,7 @@ function islandora_cdm_api_dmgetdublincorefieldinfo($params) {
  * @param array $params
  *   An array containing the alias and format.
  */
-function islandora_cdm_api_dmgetcollectionfieldinfo($params) {
+function islandora_cdm_api_dmgetcollectionfieldinfo(array $params) {
 }
 
 /**
@@ -213,7 +213,7 @@ function islandora_cdm_api_dmgetcollectionfieldinfo($params) {
  * @param array $params
  *   An array containing the alias and format.
  */
-function islandora_cdm_api_dmgetcollectionparameters($params) {
+function islandora_cdm_api_dmgetcollectionparameters(array $params) {
 }
 
 /**
@@ -222,7 +222,7 @@ function islandora_cdm_api_dmgetcollectionparameters($params) {
  * @param array $params
  *   An array containing the alias, pointer and format from the URL.
  */
-function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
+function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
 }
 
@@ -232,7 +232,7 @@ function islandora_cdm_api_dmgetcompoundobjectinfo($params) {
  * @param array $params
  *   An array containing the alias, pointer and format.
  */
-function islandora_cdm_api_dmgetimageinfo($params) {
+function islandora_cdm_api_dmgetimageinfo(array $params) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
@@ -290,7 +290,7 @@ function islandora_cdm_api_dmgetimageinfo($params) {
  * @param array $params
  *   An array containing the alias, pointer and format.
  */
-function islandora_cdm_api_dmgetiteminfo($params) {
+function islandora_cdm_api_dmgetiteminfo(array $params) {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
 }
 
@@ -302,7 +302,7 @@ function islandora_cdm_api_dmgetiteminfo($params) {
  *   sortby, maxrecs, start, suppress, docptr, suggest,
  *   facets, showunpub, denormalizedFacets, and format.
  */
-function islandora_cdm_api_dmquery($params) {
+function islandora_cdm_api_dmquery(array $params) {
   // $alias = '', $searchstrings = '', $fields = '', $sortby = '',
   // $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0',
   // $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0',
@@ -315,7 +315,7 @@ function islandora_cdm_api_dmquery($params) {
  * @param array $params
  *   An array containing the alias, pointer and format.
  */
-function islandora_cdm_api_getitemdmmodified($params) {
+function islandora_cdm_api_getitemdmmodified(array $params) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
@@ -327,7 +327,8 @@ function islandora_cdm_api_getitemdmmodified($params) {
   }
   $object = islandora_object_load($islandora_object_pid);
   // Honestly don't know what type of voodo is in action here: if we don't use
-  // something like var_export() here, the Islandora object is not properly loaded.
+  // something like var_export() here, the Islandora object is not properly
+  // loaded.
   $foo = var_export($object->lastModifiedDate, TRUE);
   $islandora_last_modified = (string) $object->lastModifiedDate->date;
   // Fedora provides 2015-01-15 03:00:06 but CONTENTdm returns 2015-01-15.
@@ -342,7 +343,7 @@ function islandora_cdm_api_getitemdmmodified($params) {
  * @param array $params
  *   An array containing the alias, pointer and format.
  */
-function islandora_cdm_api_getparent($params) {
+function islandora_cdm_api_getparent(array $params) {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
 }
 
