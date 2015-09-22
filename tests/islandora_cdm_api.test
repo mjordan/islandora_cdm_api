@@ -88,11 +88,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $match = preg_match('|Identifier|', $this->drupalGetContent());
     $this->assertTrue($match, 'Pattern |Identifier| found');
 
-    watchdog('islandora_cdm_api', "drupalGetContent is: %dgc", array('%dgc' => $this->drupalGetContent()));
-
     $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Identifier|');
+
+/*
 
     // Test GetItemDmmodified API call.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'GetItemDmmodified/testcoll1/100/json')));
@@ -149,6 +149,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response OK');
     $header3 = $this->drupalGetHeader('Content-Type');
     $this->assertEqual($header3, 'Application/octet-stream');
+*/
+
   }
 
 }
