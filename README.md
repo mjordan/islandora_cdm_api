@@ -29,6 +29,8 @@ For the Islandora CONTENTdm API to work, the following conditions must be in pla
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100</identifier>
 </mods>
 ```
+* Islandora collection objects corresponding to CONTENTdm collections need a datastream with the DS ID 'CDMFIELDINFO' containing the XML output of dmGetCollectionFieldInfo for the corresponding collection.
+* Compound Islandora objects need a datastream with the DS ID 'CDMCPD' containing the XML output of dmGetCompoundObjectInfo for the corrsponding CONTENTdm object.
 * Client applications that consume the CONTENTdm Web API and that intend to consume the compatible API provided by this module will need to replace base URLs to the API on their CONTENTdm server (e.g., http://contentdm.example.com:81/dmwebservices/index.php?q=) with URLs like http://islandora.sample.com/cdm_api?c=. For requests to the "Utils" (GetFile, GetImage, GetStream, and GetThumbnail), clients will need to replace their "website" base URLs (e.g., http://example.com[:80]) URLs like http://islandora.sample.com/cdm_api/. The query paths of the requests within the client applications will not need to be changed - only the base URLs.
 
 ![How the Islandora CONTENTdm API module works](https://dl.dropboxusercontent.com/u/1015702/linked_to/IslandoraCONTENTdmAPIModuleActivityDiagram.png)
