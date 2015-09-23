@@ -125,14 +125,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertPattern('|Title|');
 
     // Test dmGetCollectionParameters API call.
-    watchdog(
-      'islandora_cdm_api',
-      "drupalGetContent is: %dgc", array(
-        '%dgc' => $this->drupalGetContent(
-        'cdm_api',
-        array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml'))))
-    );
     $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|My Test Collection|');
+
+    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
   }

@@ -243,7 +243,7 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
     if ($params[1] == 'json') {
       drupal_add_http_header('Content-Type', 'application/json');
       $cp = array(
-        'rc]' => 2,
+        'rc' => 2,
         'name' => $object->label,
         'path' => '',
       );
@@ -258,7 +258,7 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
     }
     if ($params[1] == 'json') {
       $cp = array(
-        'rc]' => -2,
+        'rc' => -2,
         'name' => 'null',
         'path' => 'null',
       );
