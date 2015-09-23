@@ -66,7 +66,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $cdmcpd_ds->setContentFromFile($cdmcpd_file);
     $cdmcpd_ds->mimetype = "application/xml";
     $object->ingestDatastream($cdmcpd_ds);
-    $tuque->repository->ingestObject($compound_object_pid);
+    $tuque->repository->ingestObject($object);
 
     // Crete test basic image objects.
     $test_file_basenames = array('image1', 'image2', 'image3');
