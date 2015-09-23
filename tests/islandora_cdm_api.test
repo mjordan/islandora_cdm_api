@@ -51,7 +51,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Add CDMFIELDINFO datastream to the collection object.
     $cdmfieldinfo_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMFIELDINFO.json';
     $coll_object = $tuque->repository->getObject($collection_pid);
-    $cdmfieldinfo_ds = $object->constructDatastream('CDMFIELDINFO');
+    $cdmfieldinfo_ds = $coll_object->constructDatastream('CDMFIELDINFO');
     $cdmfieldinfo_ds->label = 'CONTENTdm field info';
     $cdmfieldinfo_ds->setContentFromFile($cdmfieldinfo_file);
     $cdmfieldinfo_ds->mimetype = "application/json";
