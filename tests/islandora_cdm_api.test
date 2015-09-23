@@ -115,21 +115,21 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $match = preg_match('|Identifier|', $this->drupalGetContent());
     $this->assertTrue($match, 'Pattern |Identifier| found');
 
-    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Identifier|');
 
     // Test dmGetCollectionFieldInfo API call.
-    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Title|');
 
     // Test dmGetCollectionParameters API call.
-    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml')));
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
 
-    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
   }
