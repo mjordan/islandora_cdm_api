@@ -237,7 +237,8 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
   if ($object = islandora_object_load($alias . ':collection')) {
     if ($params[1] == 'xml') {
       drupal_add_http_header('Content-Type', 'text/xml');
-      print '<?xml version="1.0" encoding="UTF-8"?><parameters><rc>2</rc><name>' . $object->label . '</name><path></path></parameters>';
+      print '<?xml version="1.0" encoding="UTF-8"?><parameters><rc>2</rc><name>' .
+        $object->label . '</name><path></path></parameters>';
     }
     if ($params[1] == 'json') {
       drupal_add_http_header('Content-Type', 'application/json');
