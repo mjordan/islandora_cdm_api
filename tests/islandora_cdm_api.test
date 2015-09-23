@@ -43,7 +43,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->drupalLogin($user);
 
     // Attempts to create collection.
-    $collection_pid = 'islandora:cdm_api_test_collection';
+    $collection_pid = 'mycollection:collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
 
     $tuque = islandora_get_tuque_connection();
@@ -114,6 +114,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Identifier|');
+
+    // Test dmGetCollectionFieldInfo API call.
+    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|Title|');
   }
 
 }

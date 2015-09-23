@@ -201,10 +201,26 @@ function islandora_cdm_api_dmgetdublincorefieldinfo(array $params) {
 /**
  * CONTENTdm API callback.
  *
+ * NOte: This function only provides JSON output.
+ *
  * @param array $params
  *   An array containing the alias and format.
  */
 function islandora_cdm_api_dmgetcollectionfieldinfo(array $params) {
+  $alias = trim($params[0]);
+  // SFU Library's convention for collection objects is to use the CONTENTdm
+  // alias as the namespace, and the string 'collection' as the rest
+  // of the PID.
+  if ($object = islandora_object_load($alias . ':collection')) {
+    $ds = $object['CDMFIELDINFO'];
+    drupal_add_http_header('Content-Type', 'application/json');
+    print $ds->content;
+  }
+  else {
+    // This is what CONTENTdm provides as a content type and response body.
+    drupal_add_http_header('Content-Type', 'text/html; charset=UTF-8');
+    print 'Error looking up collection /' . $alias . '<br>';
+  }
 }
 
 /**
