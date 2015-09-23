@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cpd>
+  <type>Document</type>
+  <page>
+    <pagetitle>Page 1</pagetitle>
+    <pagefile>16220.jp2</pagefile>
+    <pageptr>15378</pageptr>
+  </page>
+  <page>
+    <pagetitle>Page 2</pagetitle>
+    <pagefile>16221.jp2</pagefile>
+    <pageptr>15379</pageptr>
+  </page>
+</cpd>

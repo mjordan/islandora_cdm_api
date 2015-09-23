@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Attempts to ingest a sample object and test the CONTENTdm API.
+ * Attempts sample objects and test the CONTENTdm API methods.
  */
 
 class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
@@ -46,6 +46,45 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $collection_pid = 'islandora:cdm_api_test_collection';
     $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
 
+    // Add CDMFIELDINFO datastream to the collection object.
+    $cdmfieldinfo_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMFIELDINFO.json';
+    $tuque = islandora_get_tuque_connection();
+    $object = $tuque->repository->getObject($collection_pid);
+    $cdmfieldinfo_ds = $object->constructDatastream('CDMFIELDINFO');
+    $cdmfieldinfo_ds->label = 'CONTENTdm field info';
+    $cdmfieldinfo_ds->setContentFromFile($cdmfieldinfo_file);
+    $cdmfieldinfo_ds->mimetype = "application/json";
+    $object->ingestDatastream($cdmfieldinfo_ds);
+
+    /*
+    $this->pid = $this->randomName() . ":" . $this->randomName();
+    $tuque = islandora_get_tuque_connection();
+    $object = $tuque->repository->constructObject($this->pid);
+    $object = $tuque->repository->ingestObject($object);
+    $this->dsid = $this->randomName();
+    $ds = $object->constructDatastream($this->dsid);
+    $ds->label = 'Test';
+    $ds->content = 'test';
+    $object->ingestDatastream($ds);
+
+    // Create three versions.
+    $ds->mimetype = 'application/pdf';
+    $ds->label = 'jaaaaa maaaan';
+    $ds->content = 'Tests... are the bests.';
+     */
+
+    // @todo: Create a compound object with CDMCPD datastream.
+    $compound_object_pid = 'islandora:testcompound';
+    $object = $tuque->repository->constructObject($compound_object_pid);
+    $object = $tuque->repository->ingestObject($compound_object_pid);
+    $cdmcpd_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMCPD.xml';
+    $cdmcpd_ds = $object->constructDatastream('CDMCPD');
+    $cdmcpd_ds->label = 'CONTENTdm compound object info';
+    $cdmcpd_ds->setContentFromFile($cdmcpd_file);
+    $cdmcpd_ds->mimetype = "application/xml";
+    $object->ingestDatastream($cdmcpd_ds);
+
+    // Crete test basic image objects.
     $test_file_basenames = array('image1', 'image2', 'image3');
     foreach ($test_file_basenames as $basename) {
       // Attempts to create an object with an image file.
