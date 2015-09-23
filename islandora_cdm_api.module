@@ -247,6 +247,8 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
         'name' => $object->label,
         'path' => '',
       );
+      $json = json_encode($cp);
+      print $json;
     }
   }
   else {

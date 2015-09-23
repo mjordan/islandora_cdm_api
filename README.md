@@ -51,6 +51,8 @@ Install as usual, see [this](https://drupal.org/documentation/install/modules-th
 
 The admin settings form at admin/islandora/tools/cdm_api provides options for setting the source CONTENTdm server hostname and the element in your Solr index that contains each object's CONTENTdm URL.
 
+Also, you will likely want to grant anonymous users the "Access CONTENTdm API" permission.
+
 ## Current maintainer
 
 [Mark Jordan](https://github.com/mjordan)
