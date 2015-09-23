@@ -38,13 +38,13 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
   /**
    * Ingests objects and test the CONTENTdm API.
    */
-  public function testAPI() {
+  public function testApi() {
     $user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
     $this->drupalLogin($user);
 
     // Attempts to create collection.
     $collection_pid = 'mycollection:collection';
-    $this->createTestCollection('Test collection', 'islandora:sp_basic_image', $collection_pid);
+    $this->createTestCollection('My Test Collection', 'islandora:sp_basic_image', $collection_pid);
 
     $tuque = islandora_get_tuque_connection();
 
@@ -105,7 +105,9 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertPattern('|titleInfo|');
     }
 
-    // Test the various API functions.
+    /*
+     * Test the various API functions.
+     */
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
@@ -121,6 +123,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Title|');
+
+    // Test dmGetCollectionParameters API call.
+    $this->drupalGetContent('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|My Test Collection|');
   }
 
 }
