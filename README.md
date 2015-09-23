@@ -6,19 +6,24 @@ This Islandora module provides an API compatible with the [CONTENTdm Web API](ht
 
 The module is still under development but when complete will implement the following subset of the CONTENTdm API:
 
-* dmGetCollectionList
-* dmGetCollectionFieldInfo
-* dmGetDublinCoreFieldInfo
-* dmGetCompoundObjectInfo
-* dmGetImageInfo
-* dmGetItemInfo
-* dmQuery
-* GetItemDmmodified
-* GetParent
-* GetFile
-* GetImage
-* GetStream
-* GetThumbnail
+* Server level
+** dmGetCollectionList
+** dmGetDublinCoreFieldInfo
+* Collection level
+** dmGetCollectionFieldInfo
+** dmGetCollectionParameters (partial)
+* Item level
+** dmGetCompoundObjectInfo
+** dmGetImageInfo
+** dmGetItemInfo
+** dmQuery
+** GetItemDmmodified
+** GetParent
+* Utils
+** GetFile
+** GetImage
+** GetStream
+** GetThumbnail
 
 For the Islandora CONTENTdm API to work, the following conditions must be in place:
 
