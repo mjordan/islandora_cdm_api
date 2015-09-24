@@ -52,7 +52,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $cdmfieldinfo_ds->mimetype = "application/json";
     $coll_object->ingestDatastream($cdmfieldinfo_ds);
 
-    // Create a compound object with CDMCPD datastream.
+    // Create a compound object with MODS and CDMCPD datastreams.
     $compound_object_pid = 'islandora:testcompound';
     $compound_object = $tuque->repository->constructObject($compound_object_pid);
     $cdmcpd_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMCPD.xml';
@@ -61,7 +61,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $cdmcpd_ds->setContentFromFile($cdmcpd_file);
     $cdmcpd_ds->mimetype = "application/xml";
     $compound_object->ingestDatastream($cdmcpd_ds);
-    // @todo: Add the MODS datastream at compound_object.xml
     $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound_object.xml';
     $mods_ds = $compound_object->constructDatastream('MODS');
     $mods_ds->label = 'MODS Record';
@@ -70,7 +69,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $compound_object->ingestDatastream($mods_ds);
     $tuque->repository->ingestObject($compound_object);
 
-    // Crete basic image test objects.
+    // Create basic image test objects.
     $test_file_basenames = array('image1', 'image2', 'image3');
     foreach ($test_file_basenames as $basename) {
       // Attempts to create an object with an image file.
@@ -88,7 +87,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $image_path = $path . '/datastream/OBJ/view';
       $this->assertLinkByHref($image_path, 0, t('Ingested image found on view page'), t('Islandora'));
 
-      // Attempts to upload a MODS datastream for the object.
+      // Add a MODS datastream to the object.
       $mods_upload_path = $path . '/manage/datastreams/add';
       $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
       $mods_handle = fopen($mods_file, "r");
@@ -109,14 +108,9 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
   }
 
   /**
-   * Ingests objects and test the CONTENTdm API.
+   * Test the CONTENTdm API emulation methods.
    */
   public function testApi() {
-
-    /*
-     * Test the various API functions.
-     */
-
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
     $this->assertResponse(200, 'Response OK');
@@ -140,6 +134,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
+
+    // Test dmGetCompoundObjectInfo API call for object that was migrated from
+    // http://contentdm.example.com/cdm/ref/collection/testcoll4/id/1000.
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCompoundObjectInfo/testcoll4/1000/xml')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|<pagetitle>Page 2</pagetitle>|');
 
   }
 
