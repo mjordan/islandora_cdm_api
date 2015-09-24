@@ -52,7 +52,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $cdmfieldinfo_ds->mimetype = "application/json";
     $coll_object->ingestDatastream($cdmfieldinfo_ds);
 
-    // Create a compound object with MODS and CDMCPD datastreams.
+    // Create a compound object with DC and CDMCPD datastreams.
     $compound_object_pid = 'islandora:testcompound';
     $compound_object = $tuque->repository->constructObject($compound_object_pid);
     $cdmcpd_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMCPD.xml';
@@ -62,7 +62,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $cdmcpd_ds->mimetype = "application/xml";
     $compound_object->ingestDatastream($cdmcpd_ds);
     $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound_object.xml';
-    $mods_ds = $compound_object->constructDatastream('MODS');
+    $mods_ds = $compound_object->constructDatastream('DC');
     $mods_ds->label = 'MODS Record';
     $mods_ds->setContentFromFile($mods_file);
     $mods_ds->mimetype = "text/xml";

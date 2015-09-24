@@ -289,15 +289,8 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
  *   An array containing the alias, pointer and format from the URL.
  */
 function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
-  watchdog('islandora_cdm_api', "Params are %p0, %p1", array(
-    "%p0" => $params[0],
-    "%p1" => $params[1],
-    )
-  );
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
-  $pid = 'islandora:testcompound';
-  watchdog('islandora_cdm_api', "PID of test is %pid", array("%pid" => $pid));
   if ($object = islandora_object_load($pid)) {
     if (isset($object['CDMCPD'])) {
       $ds = $object['CDMCPD'];
