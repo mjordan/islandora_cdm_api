@@ -290,8 +290,9 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
  */
 function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
-  if ($object = islandora_object_load($islandora_object_pid)) {
-    watchdog('islandora_cdm_api', "PID of test is %pid", array("%pid" => $object->id));
+  $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+  watchdog('islandora_cdm_api', "PID of test is %pid", array("%pid" => $pid));
+  if ($object = islandora_object_load($pid)) {
     if (isset($object['CDMCPD'])) {
       $ds = $object['CDMCPD'];
       drupal_add_http_header('Content-Type', 'text/xml');
