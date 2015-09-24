@@ -170,10 +170,21 @@ function islandora_cdm_api_router() {
 /**
  * CONTENTdm API callback.
  *
+ * Note that this function does not populate 'path' or
+ * 'remote' elements.
+ *
  * @param array $params
  *   An array containing the format.
  */
 function islandora_cdm_api_dmgetcollectionslist(array $params) {
+  if ($params[0] == 'xml') {
+    drupal_add_http_header('Content-Type', 'text/xml');
+    // @todo: Construct the XML and print it.
+  }
+  if ($params[0] == 'json') {
+    drupal_add_http_header('Content-Type', 'application/json');
+    // @todo: Construct the JSON and print it.
+  }
 }
 
 /**
