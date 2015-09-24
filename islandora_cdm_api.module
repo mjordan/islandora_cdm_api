@@ -227,7 +227,7 @@ function islandora_cdm_api_dmgetcollectionfieldinfo(array $params) {
  * CONTENTdm API callback.
  *
  * Note: This function does not populate the 'path' data
- * and always returns '2' in 'rc'.
+ * and always returns '2' or '-2' in 'rc'.
  *
  * @param array $params
  *   An array containing the alias and format.
@@ -272,11 +272,24 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
 /**
  * CONTENTdm API callback.
  *
+ * NOte: This function only provides XML output.
+ *
  * @param array $params
  *   An array containing the alias, pointer and format from the URL.
  */
 function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
   $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+  if ($object = islandora_object_load($islandora_object_pid)) {
+    if (isset($object['CDMCPD'])) {
+      $ds = $object['CDMCPD'];
+      drupal_add_http_header('Content-Type', 'text/xml');
+      print $ds->content;
+    }
+  }
+  else {
+    drupal_add_http_header('Content-Type', 'text/xml');
+    print '<?xml version="1.0" encoding="UTF-8"?><error><code>-2</code><message>Requested item is not compound</message></error>';
+  }
 }
 
 /**

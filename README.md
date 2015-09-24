@@ -8,12 +8,12 @@ The module is still under development but when complete will implement the follo
 
 * Server level
   * dmGetCollectionList
-  * dmGetDublinCoreFieldInfo
+  * dmGetDublinCoreFieldInfo (partial implementation: JSON output only)
 * Collection level
   * dmGetCollectionFieldInfo
-  * dmGetCollectionParameters (partial)
+  * dmGetCollectionParameters (partial implementation: does not populate the 'path' data and always returns '2' or '-2' in 'rc')
 * Item level
-  * dmGetCompoundObjectInfo
+  * dmGetCompoundObjectInfo (partial implmentation: XML output only)
   * dmGetImageInfo
   * dmGetItemInfo
   * dmQuery
