@@ -33,16 +33,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'islandora_solr',
       'islandora_cdm_api',
     ));
-  }
 
-  /**
-   * Ingests objects and test the CONTENTdm API.
-   */
-  public function testApi() {
+    // Ingest test objects.
     $user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
     $this->drupalLogin($user);
 
-    // Attempts to create collection.
     $collection_pid = 'mycollection:collection';
     $this->createTestCollection('My Test Collection', 'islandora:sp_basic_image', $collection_pid);
 
@@ -111,6 +106,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertResponse(200, 'Response to MODS path is OK');
       $this->assertPattern('|titleInfo|');
     }
+  }
+
+  /**
+   * Ingests objects and test the CONTENTdm API.
+   */
+  public function testApi() {
 
     /*
      * Test the various API functions.
@@ -142,9 +143,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
 
     // Test dmGetCompoundObjectInfo API call for object that used to be at
     // http://contentdm.example.com/cdm/ref/collection/testcoll4/id/1000.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCompoundObjectInfo/testcoll4/1000/xml')));
-    $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|<pagetitle>Page 2</pagetitle>|');
+    // $this->drupalGet('cdm_api',
+    // array('query' => array(
+    // 'c' => 'dmGetCompoundObjectInfo/testcoll4/1000/xml')));
+    // $this->assertResponse(200, 'Response OK');
+    // $this->assertPattern('|<pagetitle>Page 2</pagetitle>|');
   }
 
 }
