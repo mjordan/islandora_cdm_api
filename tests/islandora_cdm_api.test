@@ -138,6 +138,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Test dmGetCompoundObjectInfo API call for object that was migrated from
     // http://contentdm.example.com/cdm/ref/collection/testcoll4/id/1000.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCompoundObjectInfo/testcoll4/1000/xml')));
+    watchdog('islandora_cdm_api', "Output of getCompoundObjectInfo is %out", array("%out" => $this->content));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Page 2|');
 
