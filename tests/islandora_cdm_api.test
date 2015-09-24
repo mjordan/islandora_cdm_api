@@ -139,7 +139,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // http://contentdm.example.com/cdm/ref/collection/testcoll4/id/1000.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCompoundObjectInfo/testcoll4/1000/xml')));
     $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|<pagetitle>Page 2</pagetitle>|');
+    $this->assertPattern('|Page 2|');
 
   }
 
