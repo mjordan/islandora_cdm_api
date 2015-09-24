@@ -291,7 +291,8 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
 function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
   watchdog('islandora_cdm_api', "Params are %p0, %p1", array(
     "%p0" => $params[0],
-    "%p1" => $params[1]),
+    "%p1" => $params[1],
+    )
   );
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
