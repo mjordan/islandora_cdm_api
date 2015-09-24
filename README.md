@@ -7,7 +7,7 @@ This Islandora module provides an API compatible with the [CONTENTdm Web API](ht
 The module is still under development but when complete will implement the following subset of the CONTENTdm API:
 
 * Server level
-  * dmGetCollectionList
+  * dmGetCollectionList (partial implementation: does not populate the 'path' or 'remote' data)
   * dmGetDublinCoreFieldInfo (partial implementation: JSON output only)
 * Collection level
   * dmGetCollectionFieldInfo
