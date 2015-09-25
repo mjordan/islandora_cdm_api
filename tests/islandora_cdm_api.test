@@ -162,7 +162,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
-      $this->assertPattern("|$ids[0]|");
+      $this->assertPattern("|$ids[1]|");
     }
   }
 
