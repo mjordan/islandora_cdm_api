@@ -26,6 +26,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * @see IslandoraWebTestCase::setUp()
    */
   public function setUp() {
+    $this->solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
     parent::setUp(array(
       'islandora',
       'islandora_basic_image',
@@ -117,6 +118,9 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    */
   public function testApi() {
     variable_set('islandora_cdm_api_identifier_element', 'mods_identifier_uri_s');
+
+    // Test to see if Solr is available.
+    $this->assertTrue(islandora_solr_ping($this->solr_url), t('Connected to Solr at %solr_url successfully.', array('%solr_url' => $this->solr_url)), 'Islandora');
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
