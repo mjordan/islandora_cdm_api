@@ -104,6 +104,13 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertResponse(200, 'Response to MODS path is OK');
       $this->assertPattern('|titleInfo|');
 
+      // Confirm the DC datastream was generated.
+      $dc_path = $object_path . '/datastream/DC/view';
+      $this->drupalGet($dc_path);
+      $this->assertResponse(200, 'Response to DC path is OK');
+      $this->assertPattern('|dc|');
+      watchdog('islandora_cdm_api', "Content is: %c", array('%c' => $this->content));
+
       // Confirm the CDMCPD datastream was ingested.
       $cpd_path = $object_path . '/datastream/CDMCPD/view';
       $this->drupalGet($cpd_path);
