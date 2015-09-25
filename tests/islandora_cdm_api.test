@@ -83,12 +83,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->drupalPost($path, $edit, t('Ingest'));
       $this->assertText('New Object', 'Image object was created', 'Islandora');
-      $path = $this->url;
-      $image_path = $path . '/datastream/OBJ/view';
+      $object_path = $this->url;
+      $image_path = $object_path . '/datastream/OBJ/view';
       $this->assertLinkByHref($image_path, 0, t('Ingested image found on view page'), t('Islandora'));
 
       // Add a MODS datastream to the object.
-      $mods_upload_path = $path . '/manage/datastreams/add';
+      $mods_upload_path = $object_path . '/manage/datastreams/add';
       $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
       $mods_handle = fopen($mods_file, "r");
       $contents = fread($mods_handle, filesize($mods_file));
@@ -101,7 +101,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->drupalPost($mods_upload_path, $edit, t('Add Datastream'));
 
       // Add a CDMCPD datastream to the object.
-      $cpd_upload_path = $path . '/manage/datastreams/add';
+      $cpd_upload_path = $object_path . '/manage/datastreams/add';
       $cpd_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMCPD.xml';
       $cpd_handle = fopen($mods_file, "r");
       $contents = fread($cpd_handle, filesize($mods_file));
@@ -113,12 +113,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->drupalPost($cpd_upload_path, $edit, t('Add Datastream'));
 
-      $mods_path = $this->url . '/datastream/MODS/view';
+      $mods_path = $object_path . '/datastream/MODS/view';
       $this->drupalGet($mods_path);
       $this->assertResponse(200, 'Response to MODS path is OK');
       $this->assertPattern('|titleInfo|');
 
-      $cpd_path = $this->url . '/datastream/CDMCPD/view';
+      $cpd_path = $object_path . '/datastream/CDMCPD/view';
       $this->drupalGet($cpd_path);
       $this->assertResponse(200, 'Response to CDMCPD path is OK');
       $this->assertPattern('|Page|');
