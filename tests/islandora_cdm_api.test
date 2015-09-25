@@ -141,14 +141,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertPattern('|My Test Collection|');
 
     // Test dmGetCompoundObjectInfo API call for object that was migrated from
-    // http://contentdm.example.com/cdm/ref/collection/testcoll4/id/1000.
-    // First, see if the test object's DC datastream exists.
-    $this->drupalGet('islandora/object/islandora:testcompound/datastream/DC/view');
-    $this->assertResponse(200, 'Response OK');
-    // Then, test the CONTENTdm API.
-    $this->assertPattern('|example|');
-
-    // Test dmGetCompoundObjectInfo API call for object that was migrated from
     // http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100.
     // http://contentdm.example.com/cdm/ref/collection/testcoll2/id/200.
     // http://contentdm.example.com/cdm/ref/collection/testcoll3/id/300.
