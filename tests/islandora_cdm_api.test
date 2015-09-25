@@ -125,7 +125,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // And if a simple query for 'contentdm' works.
     $this->drupalGet('islandora/search/contentdm', array('query' => array('type' => 'dismax')));
     $this->assertResponse(200, 'Response from simple solr search OK');
-    $match = preg_match('|\sof\s+\d|', $this->content);
+    $match = preg_match('|\sof\s+[1-9]|', $this->content);
     $this->assertTrue($match, 'Search results were found');
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
