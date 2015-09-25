@@ -121,6 +121,10 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
 
     // Test to see if Solr is available.
     $this->assertTrue(islandora_solr_ping($this->solr_url), t('Connected to Solr at %solr_url successfully.', array('%solr_url' => $this->solr_url)), 'Islandora');
+    // And if a simple query for 'islandora' works.
+    $this->drupalGet('islandora/search/islandora', array('query' => array('type' => 'dismax')));
+    $this->assertResponse(200, 'Response from simple solr search OK');
+    $this->assertFalse('Sorry, but your search returned no results.', "There were no search results.");
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
