@@ -114,11 +114,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       // Sleep to allow Solr to index the datastream content
       // before we start our tests.
       sleep(5);
-
-      // View the contents of the DC datastream.
-      $dc_path = $object_path . '/datastream/DC/view';
-      $this->drupalGet($dc_path);
-      watchdog('islandora_cdm_api', "DC content is: %c", array('%c' => $this->content));
     }
   }
 
@@ -136,6 +131,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response from simple solr search OK');
     $match = preg_match('|\sof\s+[1-9]|', $this->content);
     $this->assertTrue($match, 'Search results were found');
+    watchdog('islandora_cdm_api', "Search results: %c", array('%c' => $this->content));
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
