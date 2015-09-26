@@ -110,6 +110,10 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->drupalGet($cpd_path);
       $this->assertResponse(200, 'Response to CDMCPD path is OK');
       $this->assertPattern('|Page|');
+
+      // Sleep to allow Solr to index the datastream content
+      // before we start our tests.
+      sleep(5);
     }
   }
 
