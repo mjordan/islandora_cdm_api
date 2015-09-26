@@ -33,7 +33,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'islandora_basic_collection',
       'islandora_solr',
       'islandora_cdm_api',
-      'devel',
     ));
 
     // Ingest test objects.
