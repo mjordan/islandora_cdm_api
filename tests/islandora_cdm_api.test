@@ -84,7 +84,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         ),
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
-      sleep(5);
+      sleep(10);
     }
   }
 
