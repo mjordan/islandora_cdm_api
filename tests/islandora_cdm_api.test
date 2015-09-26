@@ -114,6 +114,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       // Sleep to allow Solr to index the datastream content
       // before we start our tests.
       sleep(5);
+
+      // View the contents of the DC datastream.
+      $dc_path = $object_path . '/datastream/DC/view';
+      $this->drupalGet($dc_path);
+      watchdog('islandora_cdm_api', "DC content is: %c", array('%c' => $this->content));
     }
   }
 
