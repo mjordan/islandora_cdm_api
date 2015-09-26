@@ -31,5 +31,6 @@ script:
   - phpcpd --names *.module,*.inc,*.test sites/all/modules/islandora_cdm_api
   - drush test-run --uri=http://localhost:8081 --debug --verbose "Islandora CONTENTdm API"
 after_failure: cat /home/travis/apierror.log
+after_success: cat /home/travis/apisuccess.log
 
 

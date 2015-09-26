@@ -131,8 +131,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response from simple solr search OK');
     $match = preg_match('|\sof\s+[1-9]|', $this->content);
     $this->assertTrue($match, 'Search results were found');
-    $foo = htmlspecialchars($this->content);
-    watchdog('islandora_cdm_api', "Search results: %c", array('%c' => $foo));
+    error_log($this->content . "\n", 3, '/home/travis/apisuccess.log');
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
