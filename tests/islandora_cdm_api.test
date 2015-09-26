@@ -56,64 +56,41 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Create basic image test objects.
     $test_file_basenames = array('image1', 'image2', 'image3');
     foreach ($test_file_basenames as $basename) {
-      // Attempts to create an object with an image file.
-      $path = 'islandora/object/' . $collection_pid . '/manage/overview/ingest';
-      $image_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.jpg';
-      $image_handle = fopen($image_file, "r");
-      $contents = fread($image_handle, filesize($image_file));
-      fclose($image_handle);
-      $edit = array(
-        'files[file]' => $image_file,
+      // Ingest the test object.
+      $object_label = 'Test image ' . $basename;
+      $object_pid = 'islandora:' . $basename;
+      $object_properties = array(
+        'label' => $object_label,
+        'pid' => $object_pid,
       );
-      $this->drupalPost($path, $edit, t('Ingest'));
-      $this->assertText('New Object', 'Image object was created', 'Islandora');
-      $object_path = $this->url;
-      $image_path = $object_path . '/datastream/OBJ/view';
-      $this->assertLinkByHref($image_path, 0, t('Ingested image found on view page'), t('Islandora'));
-
-      // Add a MODS datastream to the object.
-      $mods_upload_path = $object_path . '/manage/datastreams/add';
-      $mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
-      $mods_handle = fopen($mods_file, "r");
-      $contents = fread($mods_handle, filesize($mods_file));
-      fclose($mods_handle);
-      $edit = array(
-        'dsid' => 'MODS',
-        'label' => 'MODS record',
-        'files[file]' => $mods_file,
+      $datastreams = array(
+        array(
+          'dsid' => 'OBJ',
+          'control_group' => 'M',
+          'mimetype' => 'image/jpeg',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.jpg',
+        ),
+        array(
+          'dsid' => 'MODS',
+          'control_group' => 'M',
+          'mimetype' => 'text/xml',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml',
+        ),
+        array(
+          'dsid' => 'CDMCPD',
+          'control_group' => 'M',
+          'mimetype' => 'text/xml',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.CDMCPD.xml',
+        ),
       );
-      $this->drupalPost($mods_upload_path, $edit, t('Add Datastream'));
-
-      // Add a CDMCPD datastream to the object. These aren't compound objects,
-      // but we'll add a CDMCPD datastream to each so we can test
-      // dmGetCompoundObjectInfo.
-      $cpd_upload_path = $object_path . '/manage/datastreams/add';
-      $cpd_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.CDMCPD.xml';
-      $cpd_handle = fopen($cpd_file, "r");
-      $contents = fread($cpd_handle, filesize($cpd_file));
-      fclose($cpd_handle);
-      $edit = array(
-        'dsid' => 'CDMCPD',
-        'label' => 'CONTENTdm compound object info',
-        'files[file]' => $cpd_file,
-      );
-      $this->drupalPost($cpd_upload_path, $edit, t('Add Datastream'));
-
-      // Confirm the MODS datastream was ingested.
-      $mods_path = $object_path . '/datastream/MODS/view';
-      $this->drupalGet($mods_path);
-      $this->assertResponse(200, 'Response to MODS path is OK');
-      $this->assertPattern('|titleInfo|');
+      $this->ingestConstructedObject($object_properties, $datastreams);
+      sleep(5);
 
       // Confirm the CDMCPD datastream was ingested.
       $cpd_path = $object_path . '/datastream/CDMCPD/view';
       $this->drupalGet($cpd_path);
       $this->assertResponse(200, 'Response to CDMCPD path is OK');
       $this->assertPattern('|Page|');
-
-      // Sleep to allow Solr to index the datastream content
-      // before we start our tests.
-      sleep(5);
     }
   }
 

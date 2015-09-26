@@ -21,13 +21,7 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $target_element = variable_get('islandora_cdm_api_identifier_element', 'dc.identifier');
   $pid_query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $target_element . ':' .
     '%22' . $source_cdm_server_url . '/cdm/ref/collection/' . $alias . '/id/' . $pointer . '%22';
-
-  error_log($pid_query . "\n", 3, '/home/travis/apierror.log');
-
   $raw_result = drupal_http_request($pid_query);
-
-  error_log(var_export($raw_result) . "\n", 3, '/home/travis/apierror.log');
-
   if ($raw_result->code != 200) {
     return FALSE;
   }
