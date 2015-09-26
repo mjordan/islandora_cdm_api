@@ -85,12 +85,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
       sleep(5);
-
-      // Confirm the CDMCPD datastream was ingested.
-      $cpd_path = $object_path . '/datastream/CDMCPD/view';
-      $this->drupalGet($cpd_path);
-      $this->assertResponse(200, 'Response to CDMCPD path is OK');
-      $this->assertPattern('|Page|');
     }
   }
 
@@ -108,7 +102,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response from simple solr search OK');
     $match = preg_match('|\sof\s+[1-9]|', $this->content);
     $this->assertTrue($match, 'Search results were found');
-    error_log($this->content . "\n", 3, '/home/travis/apisuccess.log');
+    error_log($this->content . "\n", 3, '/home/travis/cdm_api.log');
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
