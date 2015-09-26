@@ -23,6 +23,7 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
     '%22' . $source_cdm_server_url . '/cdm/ref/collection/' . $alias . '/id/' . $pointer . '%22';
   error_log($pid_query . "\n", 3, '/home/travis/apierror.log');
   $raw_result = drupal_http_request($pid_query);
+  error_log(var_export($pid_query) . "\n", 3, '/home/travis/apierror.log');
   if ($raw_result->code != 200) {
     return FALSE;
   }
