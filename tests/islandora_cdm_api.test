@@ -100,7 +100,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $mods_identifier = $mods_xpath->query("//mods:identifier");
       $cdm_url = $mods_identifier->item(0)->nodeValue;
       // Then update the object's Solr document.
-      $solr_add_url = "localhost:8080/solr/update?commit=true";
+      $solr_add_url = "http://localhost:8080/solr/update?commit=true";
       $headers = array('Content-Type' => 'application/json');
       $add = array(
         array(
