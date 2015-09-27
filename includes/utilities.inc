@@ -20,7 +20,7 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $source_cdm_server_url = variable_get('islandora_cdm_api_source_cdm_url', 'http://contentdm.example.com');
 
   // Sorry to have to do this... but I have to move on.
-  if (getenv('TRAVIS')) {
+  if (getenv('WORKAROUND_FOR_SOLR') === 1) {
     $target_element = 'dc.title';
     $pid_query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $target_element . ':' .
       '%22' . $alias . '%22';
