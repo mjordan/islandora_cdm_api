@@ -25,7 +25,6 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   if ($raw_result->code != 200) {
     return FALSE;
   }
-  error_log($raw_result->data . "\n", 3, '/home/travis/cdm_api.log');
   $query_result = json_decode($raw_result->data);
   if ($query_result->response->numFound < 1) {
     return FALSE;

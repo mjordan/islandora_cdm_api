@@ -105,6 +105,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Test the CONTENTdm API emulation methods.
    */
   public function testApi() {
+    // The CONTENTdm URL is in the object title, for the tests.
     variable_set('islandora_cdm_api_identifier_element', 'dc.title');
 
     // Test to see if Solr is available.
@@ -154,7 +155,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
-      watchdog('islandora_cdm_api', "Content is: %c", array('%c' => $this->content));
       $this->assertPattern("|$ids[1]|");
     }
   }
