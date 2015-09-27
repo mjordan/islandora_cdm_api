@@ -166,7 +166,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
       watchdog('islandora_cdm_api', "Content is: %c", array('%c' => $this->content));
-      $this->assertPattern("|$ids[1]|");
+      $this->assertPattern("|$id|");
     }
   }
 
