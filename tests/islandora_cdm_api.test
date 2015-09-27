@@ -56,8 +56,21 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Create basic image test objects.
     $test_file_basenames = array('image1', 'image2', 'image3');
     foreach ($test_file_basenames as $basename) {
+      // Since the normal transforms that would add the value of the
+      // mods:identifier element into dc.identifier do not appear to work in
+      // this test environment, we resort using the CONTENTdm URL as the
+      // object label, since we know that is indexed in Solr. First, get
+      // the CONTENTdm URL for the object from its MODS file.
+      $test_mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
+      $mods_xml = file_get_contents($test_mods_file);
+      $mods_dom = new DOMDocument();
+      $mods_dom->loadXML($mods_xml);
+      $mods_xpath = new DOMXPath($mods_dom);
+      $mods_xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
+      $mods_identifier = $mods_xpath->query("//mods:identifier");
+      $object_label = $mods_identifier->item(0)->nodeValue;
+
       // Ingest the test object.
-      $object_label = 'Test image ' . $basename;
       $object_pid = 'islandora:' . $basename;
       $object_properties = array(
         'label' => $object_label,
@@ -85,36 +98,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
       sleep(5);
-
-      // Since the normal transforms that would add the value of the
-      // mods:identifier element into dc.identifier do not appear to work in
-      // this test environment, we resort to manually adding those elements to
-      // the Solr documents for our test objects. First, get the CONTENTdm URL
-      // for the object from its MODS file.
-      $test_mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
-      $mods_xml = file_get_contents($test_mods_file);
-      $mods_dom = new DOMDocument();
-      $mods_dom->loadXML($mods_xml);
-      $mods_xpath = new DOMXPath($mods_dom);
-      $mods_xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
-      $mods_identifier = $mods_xpath->query("//mods:identifier");
-      $cdm_url = $mods_identifier->item(0)->nodeValue;
-      // Then update the object's Solr document.
-      $solr_add_url = "http://localhost:8080/solr/update?commit=true";
-      $headers = array('Content-Type' => 'application/json');
-      $add = array(
-        array(
-          'PID' => $object_pid,
-          'dc.identifier' => array('add' => $cdm_url),
-        ),
-      );
-      $data = json_encode($add);
-      $add_cdm_url_result = drupal_http_request($solr_add_url, array(
-        'headers' => $headers,
-        'data' => $data)
-       );
-      error_log(var_export($add_cdm_url_result) . "\n", 3, '/home/travis/cdm_api.log');
-      sleep(5);
     }
   }
 
@@ -122,6 +105,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Test the CONTENTdm API emulation methods.
    */
   public function testApi() {
+    variable_set('islandora_cdm_api_identifier_element', 'dc.title');
+
     // Test to see if Solr is available.
     $this->assertTrue(islandora_solr_ping($this->solr_url), t('Connected to Solr at %solr_url successfully.', array('%solr_url' => $this->solr_url)), 'Islandora');
 
@@ -159,14 +144,18 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100.
     // http://contentdm.example.com/cdm/ref/collection/testcoll2/id/200.
     // http://contentdm.example.com/cdm/ref/collection/testcoll3/id/300.
-    $original_cdm_ids = array('image1', 'image2', 'image3');
-    foreach ($original_cdm_ids as $id) {
+    $original_cdm_ids = array(
+      array('testcoll1', '100'),
+      array('testcoll2', '200'),
+      array('testcoll3', '300'),
+    );
+    foreach ($original_cdm_ids as $ids) {
       $this->drupalGet('cdm_api', array(
-        'query' => array('c' => 'dmGetCompoundObjectInfo/' . $id . '/1/xml')));
+        'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
       watchdog('islandora_cdm_api', "Content is: %c", array('%c' => $this->content));
-      $this->assertPattern("|$id|");
+      $this->assertPattern("|$ids[1]|");
     }
   }
 
