@@ -84,7 +84,36 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         ),
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
-      sleep(10);
+      sleep(5);
+
+      // Since the normal transforms that would add the value of the
+      // mods:identifier element into dc.identifier do not appear to work in
+      // this test environment, we resort to manually adding those elements to
+      // the Solr documents for our test objects. First, get the CONTENTdm URL
+      // for the object from its MODS file.
+      $test_mods_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.xml';
+      $mods_xml = file_get_contents($test_mods_file);
+      $mods_dom = new DOMDocument();
+      $mods_dom->loadXML($mods_xml);
+      $mods_xpath = new DOMXPath($mods_dom);
+      $mods_xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
+      $mods_identifier = $mods_xpath->query("//mods:identifier");
+      $cdm_url = $mods_identifier->item(0)->nodeValue;
+      // Then update the object's Solr document.
+      $solr_add_url = "localhost:8080/solr/update?commit=true";
+      $headers = array('Content-Type' => 'application/json');
+      $add = array(
+        array(
+          'PID' => $object_pid,
+          'dc.identifier' => array('add' => $cdm_url),
+        ),
+      );
+      $data = json_encode($add);
+      $add_cdm_url_result = drupal_http_request($solr_add_url, array(
+        'headers' => $headers,
+        'data' => $data)
+       );
+      sleep(5);
     }
   }
 
@@ -92,8 +121,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
    * Test the CONTENTdm API emulation methods.
    */
   public function testApi() {
-    variable_set('islandora_cdm_api_identifier_element', 'mods_identifier_uri_s');
-
     // Test to see if Solr is available.
     $this->assertTrue(islandora_solr_ping($this->solr_url), t('Connected to Solr at %solr_url successfully.', array('%solr_url' => $this->solr_url)), 'Islandora');
 
@@ -102,7 +129,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response from simple solr search OK');
     $match = preg_match('|\sof\s+[1-9]|', $this->content);
     $this->assertTrue($match, 'Search results were found');
-    error_log($this->content . "\n", 3, '/home/travis/cdm_api.log');
 
     // Test GetItemDmmodified API call. drupalGet uses url()'s query syntax.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
