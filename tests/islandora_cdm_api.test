@@ -159,14 +159,10 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100.
     // http://contentdm.example.com/cdm/ref/collection/testcoll2/id/200.
     // http://contentdm.example.com/cdm/ref/collection/testcoll3/id/300.
-    $original_cdm_ids = array(
-      array('testcoll1', '100'),
-      array('testcoll2', '200'),
-      array('testcoll3', '300'),
-    );
-    foreach ($original_cdm_ids as $ids) {
+    $original_cdm_ids = array('image1', 'image2', 'image3');
+    foreach ($original_cdm_ids as $id) {
       $this->drupalGet('cdm_api', array(
-        'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
+        'query' => array('c' => 'dmGetCompoundObjectInfo/' . $id . '/1/xml')));
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
       watchdog('islandora_cdm_api', "Content is: %c", array('%c' => $this->content));
