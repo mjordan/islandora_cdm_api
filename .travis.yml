@@ -6,8 +6,9 @@ branches:
   only:
     - /^7.x/
 env:
-  - FEDORA_VERSION="3.7.0"
-  - WORKAROUND_FOR_SOLR=1
+  global:
+    - FEDORA_VERSION="3.7.0"
+    - WORKAROUND_FOR_SOLR=1 
 before_install:
   - cd $HOME
   - git clone -b 7.x git://github.com/Islandora/islandora.git
