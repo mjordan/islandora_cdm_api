@@ -157,6 +157,16 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
       $this->assertPattern("|$ids[1]|");
     }
+
+    // @todo: Add test for dmGetImageInfo.
+    // @todo: Add test for dmGetItemInfo.
+    // @todo: Add test for dmQuery.
+    // @todo: Add test for GetItemDmmodified.
+    // @todo: Add test for GetParent.
+    // @todo: Add test for getfile.
+    // @todo: Add test for getimage.
+    // @todo: Add test for getstream.
+    // @todo: Add test for getthumbnail.
   }
 
 }

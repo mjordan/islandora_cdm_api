@@ -59,3 +59,21 @@ function islandora_cdm_api_get_collections() {
   }
   return $ret;
 }
+
+/**
+ * Query the resource index to get a list of collections.
+ *
+ * @param string $path
+ *   The current URL path.
+ * @param string $query
+ *   The query following 'c', if there is one.
+ */
+function islandora_cdm_api_log_requests($path, $query = '') {
+  if (variable_get('islandora_cdm_api_log_requests', 0)) {
+    $request = $path . $query;
+    // Remove 'cdm_api'.
+    $request = substr($request, 7);
+    $variables = array('%request' => $request);
+    watchdog('islandora_cdm_api', '%request', $variables);
+  }
+}
