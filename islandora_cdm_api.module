@@ -500,13 +500,15 @@ function islandora_cdm_api_getstream($alias, $pointer) {
 function islandora_cdm_api_getthumbnail($alias, $pointer) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   islandora_cdm_api_log_requests(current_path());
-  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
+  if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
+    module_load_include('inc', 'islandora', 'includes/datastream');
+    // Load the Islandora object.
+    $object = islandora_object_load($islandora_object_pid);
+    // Get its TN datastream and return its content to client.
+    $tn = islandora_datastream_load('TN', $object);
+    islandora_download_datastream($tn);
+  }
+  else {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
   }
-  module_load_include('inc', 'islandora', 'includes/datastream');
-  // Load the Islandora object.
-  $object = islandora_object_load($islandora_object_pid);
-  // Get its TN datastream and return its content to client.
-  $tn = islandora_datastream_load('TN', $object);
-  islandora_download_datastream($tn);
 }
