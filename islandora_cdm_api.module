@@ -489,7 +489,34 @@ function islandora_cdm_api_getimage() {
 function islandora_cdm_api_getstream($alias, $pointer) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   islandora_cdm_api_log_requests(current_path());
-  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer);
+  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
+  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
+    // CONTENTdm returns a 302 Found and redirects to /cdm/error/errno/6
+    // which returns a 404.
+    drupal_not_found();
+  }
+  $object = islandora_object_load($islandora_object_pid);
+  // Formats supported by Islandora's Video Solution Pack.
+  if (isset($object['OGG'])) {
+    $dsid = 'OGG';
+    $mimetype = 'video/ogg';
+  }
+  if (isset($object['MKV'])) {
+    $dsid = 'MKV';
+    $mimetype = 'video/x-matroska';
+  }
+  if (isset($object['MP4'])) {
+    $dsid = 'MP4';
+    $mimetype = 'video/mp4';
+  }
+  // Formats supported by Islandora's Audio Solution Pack.
+  if (isset($object['PROXY_MP3'])) {
+    $dsid = 'PROXY_MP3';
+    $mimetype = 'audio/mpeg';
+  }
+  drupal_add_http_header('Content-Type', $mimetype);
+  drupal_add_http_header('Content-Length', $object[$dsid]->size);
+  print $object[$dsid]->content;
 }
 
 /**
