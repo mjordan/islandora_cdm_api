@@ -35,16 +35,15 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       'islandora_cdm_api',
     ));
 
-    // Ingest test objects.
     $user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
     $this->drupalLogin($user);
 
+    // Ingest test collection.
     $collection_pid = 'mycollection:collection';
     $this->createTestCollection('My Test Collection', 'islandora:sp_basic_image', $collection_pid);
 
-    $tuque = islandora_get_tuque_connection();
-
     // Add CDMFIELDINFO datastream to the collection object.
+    $tuque = islandora_get_tuque_connection();
     $cdmfieldinfo_file = drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMFIELDINFO.json';
     $coll_object = $tuque->repository->getObject($collection_pid);
     $cdmfieldinfo_ds = $coll_object->constructDatastream('CDMFIELDINFO');
@@ -83,6 +82,12 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
           'control_group' => 'M',
           'mimetype' => 'image/jpeg',
           'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.jpg',
+        ),
+        array(
+          'dsid' => 'TN',
+          'control_group' => 'M',
+          'mimetype' => 'image/jpeg',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/' . $basename . '.TN.jpg',
         ),
         array(
           'dsid' => 'MODS',
