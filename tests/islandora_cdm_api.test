@@ -177,7 +177,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // @todo: Add test for dmQuery.
     // @todo: Add test for GetItemDmmodified.
     // @todo: Add test for GetParent.
-    // @todo: Add test for getfile.
+    // Test the getfile API call.
+    $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/baz.jpg');
+    $this->assertResponse(200, 'Response OK');
+    $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Thumbnail has a size of 98885 bytes.');
+
     // @todo: Add test for getimage.
     // @todo: Add test for getstream.
     // Test the getthumbnail API call.

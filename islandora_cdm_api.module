@@ -454,11 +454,14 @@ function islandora_cdm_api_getfile($alias, $pointer, $filename) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   islandora_cdm_api_log_requests(current_path());
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
-    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+    drupal_not_found();
   }
   $object = islandora_object_load($islandora_object_pid);
   if (isset($object['OBJ'])) {
+    $disposition = 'attachment; filename=' . $filename;
+    drupal_add_http_header('Content-disposition', $disposition);
     drupal_add_http_header('Content-Type', 'Application/octet-stream');
+    drupal_add_http_header('Content-Length', $object['OBJ']->size);
     drupal_add_http_header('Content-description', $filename);
     print $object['OBJ']->content;
   }
