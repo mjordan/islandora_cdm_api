@@ -14,7 +14,7 @@ The module is still under development but when complete will implement the follo
   * dmGetCollectionParameters (partial implementation: does not populate the 'path' data and always returns '2' or '-2' in 'rc')
 * Item level
   * dmGetCompoundObjectInfo (partial implmentation: XML output only)
-  * dmGetImageInfo
+  * dmGetImageInfo (partial implementation: does not populate the 'filename' data)
   * dmGetItemInfo
   * dmQuery
   * GetItemDmmodified

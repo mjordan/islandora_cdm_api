@@ -158,7 +158,15 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->assertPattern("|$ids[1]|");
     }
 
-    // @todo: Add test for dmGetImageInfo.
+    // Test dmGetImageInfo API call.
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/xml')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|334|');
+
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/json')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|Record does not exist|');
+
     // @todo: Add test for dmGetItemInfo.
     // @todo: Add test for dmQuery.
     // @todo: Add test for GetItemDmmodified.
