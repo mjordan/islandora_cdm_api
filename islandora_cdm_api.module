@@ -336,11 +336,11 @@ function islandora_cdm_api_dmgetimageinfo(array $params) {
   $object = islandora_object_load($islandora_object_pid);
   $object_cmodels = $object->models;
   // The object must have one of these content models.
-  if ($object_cmodels[0]['object']['value'] == 'islandora:sp_basic_image') {
+  if ($object_cmodels[0] == 'islandora:sp_basic_image') {
     $dsid = 'OBJ';
   }
   // This approach prefers JPG2, then JPG, then OBJ.
-  if ($object_cmodels[0]['object']['value'] == 'islandora:sp_large_image_cmodel') {
+  if ($object_cmodels[0] == 'islandora:sp_large_image_cmodel') {
     if (isset($object['JP2'])) {
       $dsid = 'JP2';
     }
