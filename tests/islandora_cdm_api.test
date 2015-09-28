@@ -75,6 +75,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $object_properties = array(
         'label' => $object_label,
         'pid' => $object_pid,
+        'models' => 'islandora:sp_basic_image',
       );
       $datastreams = array(
         array(
