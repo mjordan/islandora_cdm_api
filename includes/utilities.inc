@@ -13,7 +13,7 @@
  * @param string $alias
  *   The CONTENTdm collection alias.
  * @param string $pointer
- *   The CONENTdm object pointer.
+ *   The CONTENTdm object pointer.
  */
 function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
@@ -32,6 +32,41 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
   // If more than one object was found, take the PID of the first one.
   return $query_result->response->docs[0]->PID;
 }
+
+/**
+ * Returns the CONTENTdm pointer of an object's parent, if there is one.
+ *
+ * @param string $pid
+ *   The Islandora PID of the child object.
+ * @param string $alias
+ *   The CONTENTdm collection alias.
+ * @param string $pointer
+ *   The CONTENTdm child object pointer.
+ *
+ * @return mixed
+ *   The parent object's CONTENTdm pointer or FALSE if one isn't available.
+ */
+function islandora_cdm_api_get_parent_pointer($pid, $alias, $pointer) {
+  $child_object = islandora_object_load($pid);
+  $cmodels = $child_object->models;
+  // Take the first content model/assume the object only has one.
+  if ($cmodels[0] == 'islandora:pageCModel') {
+    $rels = $child_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
+    $parent_pid = (string) $rels[0]['object']['value'];
+  }
+  else {
+    $rels = $child_object->relationships->get(FEDORA_RELS_EXT_URI, 'isConstituentOf');
+    $parent_pid = (string) $rels[0]['object']['value'];
+  }
+  if ($parent_object = islandora_object_load($parent_pid)) {
+    // @todo: Load its MODS datastream, then check to see if there's
+    // a value in an identifier field that matches a CDM reference URL.
+  }
+  else {
+    return FALSE;
+  }
+}
+
 
 /**
  * Query the resource index to get a list of collections.
