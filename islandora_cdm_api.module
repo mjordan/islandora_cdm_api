@@ -435,7 +435,35 @@ function islandora_cdm_api_getitemdmmodified(array $params) {
  *   An array containing the alias, pointer and format.
  */
 function islandora_cdm_api_getparent(array $params) {
-  $islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+  if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
+    // We need to return the CONTENTdm pointer of the parent, not the
+    // Islandora PID. For non-paged compound object, we need to do a query to
+    // get the PID value of the child object's fedora:isConstituentOf
+    // relationship. Then we would see if that object has a CONTENTdm
+    // reference URL, and if it does, get the value of the pointer in that URL.
+    // For paged content, we do the equivalent by querying for the PID
+    // value of the page's islandora:isPageOf relationship.
+    $pointer = '@todo';
+    if ($param[2] == 'xml') {
+      drupal_add_http_header('Content-Type', 'text/xml');
+      print '<?xml version="1.0" encoding="UTF-8"?><parent>' . $pointer . '</parent>';
+    }
+    if ($param[2] == 'json') {
+      drupal_add_http_header('Content-Type', 'application/json');
+      print '{"parent":' . $pointer . '}';
+    }
+  }
+  else {
+    // CONTENTdm doesn't return a 404 if the object doesn't exist.
+    if ($param[2] == 'xml') {
+      drupal_add_http_header('Content-Type', 'text/xml');
+      print '<?xml version="1.0" encoding="UTF-8"?><parent>-1</parent>';
+    }
+    if ($param[2] == 'json') {
+      drupal_add_http_header('Content-Type', 'application/json');
+      print '{"parent":-1}';
+    }
+  }
 }
 
 /**
