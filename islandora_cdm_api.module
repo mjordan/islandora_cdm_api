@@ -99,7 +99,7 @@ function islandora_cdm_api_admin_settings() {
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => variable_get('islandora_cdm_api_contentdm_url_expath', '//mods:identifier[@type="uri"]'),
-    '#description' => t('XPath expression to retrieve the CONTENTdm URL from the MODS <identifier> element.'),
+    '#description' => t('XPath expression to retrieve the CONTENTdm URL from the MODS &lt;identifier&gt; element. The first &lt;identifier&gt; elmement whose value contains the CONTENTdm server name as defined above is used.'),
     '#maxlength' => 120,
   );
   $form['islandora_cdm_api_log_requests'] = array(

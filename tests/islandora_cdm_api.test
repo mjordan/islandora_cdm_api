@@ -130,8 +130,10 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
 
       // Load islandora:image1 and add a relationship to make it
       // isConstituentOf the test compound object.
-      $compound_object = $tuque->repository->getObject('islandora:testcompoundobject');
-      $child_object = $tuque->repository->getObject('islandora:image1');
+      $compound_tuque = islandora_get_tuque_connection();
+      $compound_object = $compound_tuque->repository->getObject('islandora:testcompoundobject');
+      $child_tuque = islandora_get_tuque_connection();
+      $child_object = $child_tuque->repository->getObject('islandora:image1');
       $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
     }
   }
@@ -142,6 +144,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
   public function testApi() {
     // The CONTENTdm URL is in the object title, for the tests.
     variable_set('islandora_cdm_api_identifier_element', 'dc.title');
+    variable_set('islandora_cdm_api_contentdm_url_expath', '//mods:identifier');
 
     // Test to see if Solr is available.
     $this->assertTrue(islandora_solr_ping($this->solr_url), t('Connected to Solr at %solr_url successfully.', array('%solr_url' => $this->solr_url)), 'Islandora');
