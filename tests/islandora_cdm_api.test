@@ -135,7 +135,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
 
     // While we're at it, add the CDMITEMINFO datastream to this object.
-    $cdm_item_info_file => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMITEMINFO.json',
+    $cdm_item_info_file => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMITEMINFO.json';
     $cdm_item_info_ds = $child_object->constructDatastream('CDMITEMINFO');
     $cdm_item_info_ds->label = 'CONTENTdm item info';
     $cdm_item_info_ds->setContentFromFile($cdm_item_info_file);
