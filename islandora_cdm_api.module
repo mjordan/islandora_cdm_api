@@ -454,22 +454,22 @@ function islandora_cdm_api_getparent(array $params) {
     // pointer from it.
     module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
     $pointer = islandora_cdm_api_get_parent_pointer($islandora_object_pid, $params[0], $params[1]);
-    if ($param[2] == 'xml') {
+    if ($params[2] == 'xml') {
       drupal_add_http_header('Content-Type', 'text/xml');
       print '<?xml version="1.0" encoding="UTF-8"?><parent>' . $pointer . '</parent>';
     }
-    if ($param[2] == 'json') {
+    if ($params[2] == 'json') {
       drupal_add_http_header('Content-Type', 'application/json');
       print '{"parent":' . $pointer . '}';
     }
   }
   else {
     // CONTENTdm doesn't return a 404 if the object doesn't exist.
-    if ($param[2] == 'xml') {
+    if ($params[2] == 'xml') {
       drupal_add_http_header('Content-Type', 'text/xml');
       print '<?xml version="1.0" encoding="UTF-8"?><parent>-1</parent>';
     }
-    if ($param[2] == 'json') {
+    if ($params[2] == 'json') {
       drupal_add_http_header('Content-Type', 'application/json');
       print '{"parent":-1}';
     }
