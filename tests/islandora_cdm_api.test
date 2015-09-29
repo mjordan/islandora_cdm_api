@@ -104,6 +104,35 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
       sleep(5);
+
+      // Create compound test object.
+      $object_properties = array(
+        'label' => 'http://contentdm.example.com/cdm/ref/collection/testcoll1/id/1000',
+        'pid' => 'islandora:testcompoundobject',
+        'models' => 'islandora:compoundCModel',
+      );
+      $datastreams = array(
+        array(
+          'dsid' => 'MODS',
+          'control_group' => 'M',
+          'mimetype' => 'text/xml',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.xml',
+        ),
+        array(
+          'dsid' => 'CDMCPD',
+          'control_group' => 'M',
+          'mimetype' => 'text/xml',
+          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.CDMCPD.xml',
+        ),
+      );
+      $this->ingestConstructedObject($object_properties, $datastreams);
+      sleep(5);
+
+      // Load islandora:image1 and add a relationship to make it
+      // isConstituentOf the test compound object.
+      $compound_object = $tuque->repository->getObject('islandora:testcompoundobject');
+      $child_object = $tuque->repository->getObject('islandora:image1');
+      $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
     }
   }
 
@@ -176,7 +205,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // @todo: Add test for dmGetItemInfo.
     // @todo: Add test for dmQuery.
     // @todo: Add test for GetItemDmmodified.
-    // @todo: Add test for GetParent.
+    // Test GetParent API call.
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'GetParent/testcoll1/100/xml')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|1000|');
+
     // Test the getfile API call.
     $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/baz.jpg');
     $this->assertResponse(200, 'Response OK');
