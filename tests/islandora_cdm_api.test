@@ -104,40 +104,35 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       );
       $this->ingestConstructedObject($object_properties, $datastreams);
       sleep(5);
-
-      // Create compound test object.
-      $object_properties = array(
-        'label' => 'http://contentdm.example.com/cdm/ref/collection/testcoll1/id/1000',
-        'pid' => 'islandora:testcompoundobject',
-        'models' => 'islandora:compoundCModel',
-      );
-      $datastreams = array(
-        array(
-          'dsid' => 'MODS',
-          'control_group' => 'M',
-          'mimetype' => 'text/xml',
-          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.xml',
-        ),
-        array(
-          'dsid' => 'CDMCPD',
-          'control_group' => 'M',
-          'mimetype' => 'text/xml',
-          'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.CDMCPD.xml',
-        ),
-      );
-      $this->ingestConstructedObject($object_properties, $datastreams);
-      sleep(5);
-
-      // Load islandora:image1 and add a relationship to make it
-      // isConstituentOf the test compound object.
-      $compound_tuque = islandora_get_tuque_connection();
-      $compound_tuque->cache->resetCache();
-      $compound_object = $compound_tuque->repository->getObject('islandora:testcompoundobject');
-      $child_tuque = islandora_get_tuque_connection();
-      $child_tuque->cache->resetCache();
-      $child_object = $child_tuque->repository->getObject('islandora:image1');
-      $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
     }
+    // Create compound test object.
+    $object_properties = array(
+      'label' => 'http://contentdm.example.com/cdm/ref/collection/testcoll1/id/1000',
+      'pid' => 'islandora:testcompoundobject',
+      'models' => 'islandora:compoundCModel',
+    );
+    $datastreams = array(
+      array(
+        'dsid' => 'MODS',
+        'control_group' => 'M',
+        'mimetype' => 'text/xml',
+        'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.xml',
+      ),
+      array(
+        'dsid' => 'CDMCPD',
+        'control_group' => 'M',
+        'mimetype' => 'text/xml',
+        'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.CDMCPD.xml',
+      ),
+    );
+    $this->ingestConstructedObject($object_properties, $datastreams);
+    sleep(5);
+
+    // Load islandora:image1 and add a relationship to make it
+    // isConstituentOf the test compound object.
+    $compound_object = $tuque->repository->getObject('islandora:testcompoundobject');
+    $child_object = $tuque->repository->getObject('islandora:image1');
+    $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
   }
 
   /**
