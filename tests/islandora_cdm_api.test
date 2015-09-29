@@ -131,7 +131,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       // Load islandora:image1 and add a relationship to make it
       // isConstituentOf the test compound object.
       $compound_tuque = islandora_get_tuque_connection();
-      $commpound_tuque->cache->resetCache();
+      $compound_tuque->cache->resetCache();
       $compound_object = $compound_tuque->repository->getObject('islandora:testcompoundobject');
       $child_tuque = islandora_get_tuque_connection();
       $child_tuque->cache->resetCache();
