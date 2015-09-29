@@ -133,6 +133,14 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $compound_object = $tuque->repository->getObject('islandora:testcompoundobject');
     $child_object = $tuque->repository->getObject('islandora:image1');
     $child_object->relationships->add(FEDORA_RELS_EXT_URI, 'isConstituentOf', $compound_object);
+
+    // While we're at it, add the CDMITEMINFO datastream to this object.
+    $cdm_item_info_file => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/CDMITEMINFO.json',
+    $cdm_item_info_ds = $child_object->constructDatastream('CDMITEMINFO');
+    $cdm_item_info_ds->label = 'CONTENTdm item info';
+    $cdm_item_info_ds->setContentFromFile($cdm_item_info_file);
+    $cdm_item_info_ds->mimetype = "application/json";
+    $child_object->ingestDatastream($cdm_item_info_ds);
   }
 
   /**
@@ -202,7 +210,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Record does not exist|');
 
-    // @todo: Add test for dmGetItemInfo.
+    // Test the dmGetItemInfo API call.
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetItemInfo/testcoll1/100/json')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|Vancouver|');
+
     // @todo: Add test for dmQuery.
     // @todo: Add test for GetItemDmmodified.
     // Test GetParent API call.

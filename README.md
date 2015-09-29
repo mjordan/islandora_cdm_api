@@ -34,6 +34,7 @@ For the Islandora CONTENTdm API to work, the following conditions must be in pla
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100</identifier>
 </mods>
 ```
+* Islandora objects need a datastream with the DS ID 'CDMITEMINFO' containing the JSON output of dmGetItemInfo for the corresponding CONTENTdm object.
 * Islandora collection objects corresponding to CONTENTdm collections need a datastream with the DS ID 'CDMFIELDINFO' containing the JSON output of dmGetCollectionFieldInfo for the corresponding collection.
 * Islandora collection objects corresponding to CONTENTdm collections need PIDs that use the CONTENTdm collection alias as the namespace, and the string 'collection' as the rest of the PID, e.g., 'art:collection'.
 * Compound Islandora objects need a datastream with the DS ID 'CDMCPD' containing the XML output of dmGetCompoundObjectInfo for the corrsponding CONTENTdm object.
