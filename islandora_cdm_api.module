@@ -87,12 +87,20 @@ function islandora_cdm_api_admin_settings() {
     '#maxlength' => 60,
   );
   $form['islandora_cdm_api_identifier_element'] = array(
-    '#title' => t('Identifier element'),
+    '#title' => t('Identifier element in Solr'),
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => variable_get('islandora_cdm_api_identifier_element', 'dc.identifier'),
     '#description' => t('The element to specify in the Solr query to find CONTENTdm reference URLs. MODS <identifier> elements get mapped to dc.identifer automatically, so if your MODS stores the CONTENTdm reference URLs there, use dc.identifier.'),
     '#maxlength' => 60,
+  );
+  $form['islandora_cdm_api_contentdm_url_expath'] = array(
+    '#title' => t('XPath expression to get CONTENTdm URL'),
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => variable_get('islandora_cdm_api_contentdm_url_expath', '//mods:identifier[@type="uri"]'),
+    '#description' => t('XPath expression to retrieve the CONTENTdm URL from the MODS <identifier> element.'),
+    '#maxlength' => 120,
   );
   $form['islandora_cdm_api_log_requests'] = array(
     '#type' => 'checkbox',

@@ -55,12 +55,33 @@ function islandora_cdm_api_get_parent_pointer($pid, $alias, $pointer) {
     $parent_pid = (string) $rels[0]['object']['value'];
   }
   else {
+    // Every other content model.
     $rels = $child_object->relationships->get(FEDORA_RELS_EXT_URI, 'isConstituentOf');
     $parent_pid = (string) $rels[0]['object']['value'];
   }
   if ($parent_object = islandora_object_load($parent_pid)) {
-    // @todo: Load its MODS datastream, then check to see if there's
+    // Load the parent's MODS datastream, then check to see if there's
     // a value in an identifier field that matches a CDM reference URL.
+    if (isset($parent_object['MODS'])) {
+      $xml = new SimpleXMLElement($parent_object['MODS']->content);
+      $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+      $xpath_expression = variable_get('islandora_cdm_api_contentdm_url_expath',
+        '//mods:identifier[@type="uri"]');
+      $contentdm_urls = $xml->xpath($xpath_expression);
+      $contentdm_host = variable_get('islandora_cdm_api_source_cdm_url', 'http://contentdm.example.com');
+      foreach ($contentdm_urls as $contentdm_url) {
+        // If we find what looks like a CONTENTdm reference URL, get the
+        // pointer, which should be the last part of the URL path.
+        $contentdm_url_string = (string) $contentdm_url;
+        if (strpos($contentdm_url_string, $contentdm_host) !== FALSE) {
+          $url_parts = explode('/', $contentdm_url);
+          return trim(end($url_parts));
+        }
+      }
+    }
+    else {
+      return FALSE;
+    }
   }
   else {
     return FALSE;
