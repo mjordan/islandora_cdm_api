@@ -447,11 +447,7 @@ function islandora_cdm_api_getitemdmmodified(array $params) {
     '<error>Sorry, output for dmGetItemDmmodified is not available in xml</error><xml>';
   }
   $object = islandora_object_load($islandora_object_pid);
-  // Honestly don't know what type of voodo is in action here: if we don't use
-  // something like var_export() here, the Islandora object is not properly
-  // loaded.
-  $foo = var_export($object->lastModifiedDate, TRUE);
-  $islandora_last_modified = (string) $object->lastModifiedDate->date;
+  $islandora_last_modified = (string) $object->lastModifiedDate;
   // Fedora provides 2015-01-15 03:00:06 but CONTENTdm returns 2015-01-15.
   $cdm_last_modified = preg_replace('/\s.*$/', '', $islandora_last_modified);
   $output = array('0', $cdm_last_modified);
