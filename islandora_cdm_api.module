@@ -437,21 +437,29 @@ function islandora_cdm_api_dmquery(array $params) {
  *   An array containing the alias, pointer and format.
  */
 function islandora_cdm_api_getitemdmmodified(array $params) {
-  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
-  if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
-    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
-  }
   if ($params[2] == 'xml') {
     drupal_add_http_header('Content-Type', 'text/xml; utf-8');
     print '<?xml version="1.0" encoding="UTF-8"?>' .
-    '<error>Sorry, output for dmGetItemDmmodified is not available in xml</error><xml>';
+      '<error>Sorry, output for dmGetItemDmmodified is not available in xml</error><xml>';
+    drupal_exit();
   }
-  $object = islandora_object_load($islandora_object_pid);
-  $islandora_last_modified = (string) $object->lastModifiedDate;
-  // Fedora provides 2015-01-15 03:00:06 but CONTENTdm returns 2015-01-15.
-  $cdm_last_modified = preg_replace('/\s.*$/', '', $islandora_last_modified);
-  $output = array('0', $cdm_last_modified);
-  drupal_json_output($output);
+  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
+  if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
+    $object = islandora_object_load($islandora_object_pid);
+    $islandora_last_modified = (string) $object->lastModifiedDate;
+    // Fedora provides 2015-09-29T05:39:12.726Z but CONTENTdm
+    // returns 2015-09-29.
+    $cdm_last_modified = preg_replace('/T.*$/', '', $islandora_last_modified);
+    $output = array('0', $cdm_last_modified);
+    drupal_json_output($output);
+  }
+  else {
+    // Despite what OCLC's documentation for GetItemDmmodified says,
+    // if the object is not found, this call returns a 200 with
+    // JSON content type, and the non-JSON string 'null'.
+    drupal_add_http_header('Content-Type', 'application/json');
+    print 'null';
+  }
 }
 
 /**
