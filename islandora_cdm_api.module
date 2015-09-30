@@ -386,11 +386,20 @@ function islandora_cdm_api_dmgetimageinfo(array $params) {
 /**
  * CONTENTdm API callback.
  *
+ * Note that this module only supports the JSON response format.
+ *
  * @param array $params
  *   An array containing the alias, pointer and format.
  */
 function islandora_cdm_api_dmgetiteminfo(array $params) {
+  if ($params[2] == 'xml') {
+    drupal_add_http_header('Content-Type', 'text/xml; utf-8');
+    print '<?xml version="1.0" encoding="UTF-8"?>' .
+      '<error>Sorry, output for dmGetItemInfo is not available in xml</error><xml>';
+    drupal_exit();
+  }
   drupal_add_http_header('Content-Type', 'application/json');
+  $json_error = '{"code":"-2","message":"Requested item not found","restrictionCode":"-1"}';
   if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
     if ($islandora_object = islandora_object_load($islandora_object_pid)) {
       if (isset($islandora_object['MODS'])) {
@@ -400,18 +409,23 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
         $xpath = new DOMXpath($dom);
         $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
         $cdmiteminfo = $xpath->query("//mods:extension/mods:cdmiteminfo");
-        print $cdmiteminfo->item(0)->nodeValue;
+        if ($cdmiteminfo->length) {
+          print $cdmiteminfo->item(0)->nodeValue;
+        }
+        else {
+          print $json_error;
+        }
       }
       else {
-        print '{"code":"-2","message":"Requested item not found","restrictionCode":"-1"}';
+        print $json_error;
       }
     }
     else {
-      print '{"code":"-2","message":"Requested item not found","restrictionCode":"-1"}';
+      print $json_error;
     }
   }
   else {
-    print '{"code":"-2","message":"Requested item not found","restrictionCode":"-1"}';
+    print $json_error;
   }
 }
 
