@@ -15,7 +15,7 @@ The module is still under development but when complete will implement the follo
 * Item level
   * dmGetCompoundObjectInfo (partial implmentation: XML output only)
   * dmGetImageInfo (partial implementation: does not populate the 'filename' data)
-  * dmGetItemInfo
+  * dmGetItemInfo (partial implementation: JSON output only)
   * dmQuery
   * GetItemDmmodified
   * GetParent

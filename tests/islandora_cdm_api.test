@@ -213,7 +213,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Test the dmGetItemInfo API call.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetItemInfo/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|Vancouver|');
+    $this->assertPattern('|private study|');
 
     // @todo: Add test for dmQuery.
     // @todo: Add test for GetItemDmmodified.

@@ -393,8 +393,14 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
   drupal_add_http_header('Content-Type', 'application/json');
   if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
     if ($islandora_object = islandora_object_load($islandora_object_pid)) {
-      if (isset($islandora_object['CDMITEMINFO'])) {
-        print $islandora_object['CDMITEMINFO']->content;
+      if (isset($islandora_object['MODS'])) {
+        // Get the JSON contained within the <cdmiteminfo> extension element.
+        $dom = new DOMDocument();
+        $dom->loadXML($islandora_object['MODS']->content);
+        $xpath = new DOMXpath($dom);
+        $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
+        $cdmiteminfo = $xpath->query("//mods:extension/mods:cdmiteminfo");
+        print $cdmiteminfo->item(0)->nodeValue;
       }
       else {
         print '{"code":"-2","message":"Requested item not found","restrictionCode":"-1"}';

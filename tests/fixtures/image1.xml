@@ -3,4 +3,7 @@
         <title>Image 1</title>
     </titleInfo>
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100</identifier>
+  <extension>
+    <cdmiteminfo source="Item metadata as exported from CONTENTdm on 2015-09-29."><![CDATA[{"title":"War Knife with Carved Pommel","langua":"Tlingit","sublan":{},"covera":{},"descri":"Steel dagger with carved figures on pommel and inlaid with abalone.","creato":"Unknown","date":{},"datea":{},"keywor":"abalone, dagger, pommel, raven, warfare, weapon","image":"National Museum of the American Indian 3540","type":"image","format":"image\/jpg","identi":"warobjects271","rights":"Unknown. This image is to be used solely for the purpose of research or private study. Any use of the image for a purpose other than research or private study requires the authorization of the copyright owner of the work in question. If you know more about an image in our collection, or if you are the copyright owner and believe we have not properly attributed your work, please contact The Bill Reid Centre..","fullrs":{},"find":"5671.jp2","dmaccess":{},"dmimage":{},"dmcreated":"2015-03-19","dmmodified":"2015-03-19","dmoclcno":{},"dmrecord":"5670","restrictionCode":"1","cdmfilesize":"102053","cdmfilesizeformatted":"0.10 MB","cdmprintpdf":"0","cdmhasocr":"0","cdmisnewspaper":"0"}]]></cdmiteminfo>
+  </extension>
 </mods>
