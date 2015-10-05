@@ -310,6 +310,7 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
     '<message>Requested item is not compound</message></error>';
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
+  drupal_add_http_header('Content-Type', 'text/xml');
   if ($object = islandora_object_load($pid)) {
     if (isset($object['MODS'])) {
       // Get the JSON contained within the <dmGetCompoundObjectInfo>
@@ -320,21 +321,18 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
       $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
       $cdm_compound_item_info = $xpath->query("//mods:extension/mods:CONTENTdmData/mods:dmGetCompoundObjectInfo");
       if ($cdm_compound_item_info->length) {
-        drupal_add_http_header('Content-Type', 'text/xml');
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
       else {
-        print $xml_error;
+        print $xml_error . ' First';
       }
     }
     else {
-      drupal_add_http_header('Content-Type', 'text/xml');
-      print $xml_error;
+      print $xml_error . ' Second';
     }
   }
   else {
-    drupal_add_http_header('Content-Type', 'text/xml');
-    print $xml_error;
+    print $xml_error . ' Third';
   }
 }
 
