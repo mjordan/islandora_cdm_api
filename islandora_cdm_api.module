@@ -507,7 +507,7 @@ function islandora_cdm_api_getparent(array $params) {
       // Load the object's MODS datastream, then check to see if there's
       // a value in the <parent> element.
       if (isset($child_object['MODS'])) {
-        $xml = new SimpleXMLElement($parent_object['MODS']->content);
+        $xml = new SimpleXMLElement($child_object['MODS']->content);
         $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
         $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:GetParent';
         $get_parent = $xml->xpath($xpath_expression);
