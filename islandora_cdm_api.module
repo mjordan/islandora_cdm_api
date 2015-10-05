@@ -506,7 +506,7 @@ function islandora_cdm_api_getparent(array $params) {
     if ($child_object = islandora_object_load($child_pid)) {
       // Load the object's MODS datastream, then check to see if there's
       // a value in the <parent> element.
-      if (isset($parent_object['MODS'])) {
+      if (isset($child_object['MODS'])) {
         $xml = new SimpleXMLElement($parent_object['MODS']->content);
         $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
         $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:GetParent';
@@ -524,24 +524,24 @@ function islandora_cdm_api_getparent(array $params) {
               print '{"parent":' . $parent_pointer->item(0)->nodeValue . '}';
             }
             else {
-              print $error_message;
+              print $error_message . ' ## No parent pointer';
             }
           }
         }
         else {
-          print $error_message;
+          print $error_message . ' ## No parent element';
         }
       }
       else {
-        print $error_message;
+        print $error_message . ' ## No parent object MODS';
       }
     }
     else {
-      print $error_message;
+      print $error_message . ' ## No child object';
     }
   }
   else {
-    print $error_message;
+    print $error_message . ' ## No child PID';
   }
 }
 
