@@ -415,9 +415,9 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
         // Get the JSON contained within the <cdmiteminfo> extension element.
         $dom = new DOMDocument();
         $dom->loadXML($islandora_object['MODS']->content);
-        $cdmiteminfo = $dom->getElementsByTagName('dmGetItemInfo');
-        if ($cdmiteminfo->length) {
-          print trim($cdmiteminfo->item(0)->nodeValue);
+        $cdm_item_info = $dom->getElementsByTagName('dmGetItemInfo');
+        if ($cdm_item_info->length) {
+          print trim($cdm_item_info->item(0)->nodeValue);
         }
         else {
           print $json_error;
@@ -496,7 +496,7 @@ function islandora_cdm_api_getparent(array $params) {
     // the PID of its parent (value of islandora:isPageOf), then see if
     // that object has a CONTENTdm reference URL and if so, get the pointer
     // from it. For a non-paged content model object, we get its parent
-    // by doing a to get the value of its fedora:isConstituentOf relationship,
+    // by getting the value of its fedora:isConstituentOf relationship,
     // and if the returned object has a CONTENTdm reference URL, get the
     // pointer from it.
     module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
