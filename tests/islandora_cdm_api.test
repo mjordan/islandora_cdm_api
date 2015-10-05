@@ -183,6 +183,8 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       $this->drupalGet('cdm_api', array(
         'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
       $this->assertResponse(200, 'Response OK');
+      watchdog('islandora_cdm_api', 'Content of dmGetCompoundObjectInfo is %c',
+        array('%c' => $this->content));
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
       $this->assertPattern("|$ids[1]|");
     }
