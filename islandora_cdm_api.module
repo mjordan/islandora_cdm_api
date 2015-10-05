@@ -316,21 +316,21 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
       // Get the JSON contained within the <dmGetCompoundObjectInfo>
       // extension element.
       $dom = new DOMDocument();
-      $dom->loadXML($islandora_object['MODS']->content);
+      $dom->loadXML($object['MODS']->content);
       $cdm_compound_item_info = $dom->getElementsByTagName('dmGetCompoundObjectInfo');
       if ($cdm_compound_item_info->length) {
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
       else {
-        print $xml_error . ' First';
+        print $xml_error . ' ## No node length';
       }
     }
     else {
-      print $xml_error . ' Second';
+      print $xml_error . ' ## No MODS';
     }
   }
   else {
-    print $xml_error . ' Third';
+    print $xml_error . ' ## No object';
   }
 }
 
