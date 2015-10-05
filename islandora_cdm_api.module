@@ -322,15 +322,15 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
       else {
-        print $xml_error . ' ## No node length';
+        print $xml_error;
       }
     }
     else {
-      print $xml_error . ' ## No MODS';
+      print $xml_error;
     }
   }
   else {
-    print $xml_error . ' ## No object';
+    print $xml_error;
   }
 }
 
@@ -415,11 +415,9 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
         // Get the JSON contained within the <cdmiteminfo> extension element.
         $dom = new DOMDocument();
         $dom->loadXML($islandora_object['MODS']->content);
-        $xpath = new DOMXpath($dom);
-        $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
-        $cdmiteminfo = $xpath->query("//mods:extension/mods:CONTENTdmData/mods:dmGetItemInfo");
+        $cdmiteminfo = $dom->getElementsByTagName('dmGetItemInfo');
         if ($cdmiteminfo->length) {
-          print $cdmiteminfo->item(0)->nodeValue;
+          print trim($cdmiteminfo->item(0)->nodeValue);
         }
         else {
           print $json_error;

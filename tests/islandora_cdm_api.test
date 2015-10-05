@@ -112,12 +112,6 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
         'mimetype' => 'text/xml',
         'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.xml',
       ),
-      array(
-        'dsid' => 'CDMCPD',
-        'control_group' => 'M',
-        'mimetype' => 'text/xml',
-        'path' => drupal_get_path('module', 'islandora_cdm_api') . '/tests/fixtures/compound1.CDMCPD.xml',
-      ),
     );
     $this->ingestConstructedObject($object_properties, $datastreams);
     sleep(5);
