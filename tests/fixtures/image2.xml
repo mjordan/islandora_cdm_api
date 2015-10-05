@@ -3,4 +3,23 @@
         <title>Image 2</title>
     </titleInfo>
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll2/id/200</identifier>
+    <extension>
+    <CONTENTdmData>
+      <dmGetCompoundObjectInfo timestamp="2015-10-04 13:26:29" mimetype="text/xml"><![CDATA[
+<?xml version="1.0" encoding="utf-8"?>
+<cpd>
+  <type>Document</type>
+  <page>
+    <pagetitle>Page 2</pagetitle>
+    <pagefile>16220.jp2</pagefile>
+    <pageptr>200</pageptr>
+  </page>
+  <page>
+    <pagetitle>Page 2</pagetitle>
+    <pagefile>16221.jp2</pagefile>
+    <pageptr>15379</pageptr>
+  </page>
+ </cpd>]]></dmGetCompoundObjectInfo>
+    </CONTENTdmData>
+  </extension>
 </mods>

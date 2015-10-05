@@ -306,22 +306,35 @@ function islandora_cdm_api_dmgetcollectionparameters(array $params) {
  *   An array containing the alias, pointer and format from the URL.
  */
 function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
+  $xml_error = '<?xml version="1.0" encoding="UTF-8"?><error><code>-2</code>' .
+    '<message>Requested item is not compound</message></error>';
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   if ($object = islandora_object_load($pid)) {
-    if (isset($object['CDMCPD'])) {
-      $ds = $object['CDMCPD'];
-      drupal_add_http_header('Content-Type', 'text/xml');
-      print $ds->content;
+    if (isset($islandora_object['MODS'])) {
+      // Get the JSON contained within the <dmGetCompoundObjectInfo>
+      // extension element.
+      $dom = new DOMDocument();
+      $dom->loadXML($islandora_object['MODS']->content);
+      $xpath = new DOMXpath($dom);
+      $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
+      $cdm_compound_item_info = $xpath->query("//mods:extension/mods:CONTENTdmData/mods:dmGetCompoundObjectInfo");
+      if ($cdm_compound_item_info->length) {
+        drupal_add_http_header('Content-Type', 'text/xml');
+        print trim($cdm_compound_item_info->item(0)->nodeValue);
+      }
+      else {
+        print $xml_error;
+      }
     }
     else {
       drupal_add_http_header('Content-Type', 'text/xml');
-      print '<?xml version="1.0" encoding="UTF-8"?><error><code>-2</code><message>Requested item is not compound</message></error>';
+      print $xml_error;
     }
   }
   else {
     drupal_add_http_header('Content-Type', 'text/xml');
-    print '<?xml version="1.0" encoding="UTF-8"?><error><code>-2</code><message>Requested item is not compound</message></error>';
+    print $xml_error;
   }
 }
 
@@ -408,7 +421,7 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
         $dom->loadXML($islandora_object['MODS']->content);
         $xpath = new DOMXpath($dom);
         $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
-        $cdmiteminfo = $xpath->query("//mods:extension/mods:cdmiteminfo");
+        $cdmiteminfo = $xpath->query("//mods:extension/mods:CONTENTdmData/mods:dmGetItemInfo");
         if ($cdmiteminfo->length) {
           print $cdmiteminfo->item(0)->nodeValue;
         }
