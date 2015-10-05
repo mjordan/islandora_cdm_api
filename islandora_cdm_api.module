@@ -324,17 +324,17 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
       else {
-        print $xml_error;
+        print $xml_error . 'First';
       }
     }
     else {
       drupal_add_http_header('Content-Type', 'text/xml');
-      print $xml_error;
+      print $xml_error . 'Second';
     }
   }
   else {
     drupal_add_http_header('Content-Type', 'text/xml');
-    print $xml_error;
+    print $xml_error . 'Third';
   }
 }
 
