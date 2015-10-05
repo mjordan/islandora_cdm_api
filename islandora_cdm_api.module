@@ -317,9 +317,7 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
       // extension element.
       $dom = new DOMDocument();
       $dom->loadXML($islandora_object['MODS']->content);
-      $xpath = new DOMXpath($dom);
-      $xpath->registerNamespace('mods', "http://www.loc.gov/mods/v3");
-      $cdm_compound_item_info = $xpath->query("//mods:extension/mods:CONTENTdmData/mods:dmGetCompoundObjectInfo");
+      $cdm_compound_item_info = $dom->getElementsByTagName('dmGetCompoundObjectInfo');
       if ($cdm_compound_item_info->length) {
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
