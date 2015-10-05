@@ -311,7 +311,7 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   $pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1]);
   if ($object = islandora_object_load($pid)) {
-    if (isset($islandora_object['MODS'])) {
+    if (isset($object['MODS'])) {
       // Get the JSON contained within the <dmGetCompoundObjectInfo>
       // extension element.
       $dom = new DOMDocument();
@@ -324,17 +324,17 @@ function islandora_cdm_api_dmgetcompoundobjectinfo(array $params) {
         print trim($cdm_compound_item_info->item(0)->nodeValue);
       }
       else {
-        print $xml_error . 'First';
+        print $xml_error;
       }
     }
     else {
       drupal_add_http_header('Content-Type', 'text/xml');
-      print $xml_error . 'Second';
+      print $xml_error;
     }
   }
   else {
     drupal_add_http_header('Content-Type', 'text/xml');
-    print $xml_error . 'Third';
+    print $xml_error;
   }
 }
 
