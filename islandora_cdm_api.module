@@ -509,16 +509,23 @@ function islandora_cdm_api_getparent(array $params) {
       if (isset($parent_object['MODS'])) {
         $xml = new SimpleXMLElement($parent_object['MODS']->content);
         $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
-        $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:parent';
-        $parent_pointer = $xml->xpath($xpath_expression);
-        if ($parent_pointer->length) {
-          $parent_pointer_value = trim($parent_pointer->item(0)->nodeValue);
+        $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:GetParent';
+        $get_parent = $xml->xpath($xpath_expression);
+        if ($get_parent->length) {
+          $get_parent_xml = trim($get_parent->item(0)->nodeValue);
           if ($params[2] == 'xml') {
-            print '<?xml version="1.0" encoding="UTF-8"?><parent>' .
-              $parent_pointer_pointer . '</parent>';
+            print $get_parent_xml;
           }
           if ($params[2] == 'json') {
-            print '{"parent":' . $parent_pointer_value . '}';
+            // Parse out the value of the pointer from the stored XML.
+            $get_parent_element = new SimpleXMLElement($parent_pointer_xml);
+            $parent_pointer = $get_parent_element->getElementsByTagName('parent');
+            if ($parent_pointer->length) {
+              print '{"parent":' . $parent_pointer->item(0)->nodeValue . '}';
+            }
+            else {
+              print $error_message;
+            }
           }
         }
         else {
