@@ -507,41 +507,45 @@ function islandora_cdm_api_getparent(array $params) {
       // Load the object's MODS datastream, then check to see if there's
       // a value in the <parent> element.
       if (isset($child_object['MODS'])) {
-        $xml = new SimpleXMLElement($child_object['MODS']->content);
-        $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+        $dom = new DOMDocument();
+        $dom->loadXML($child_object['MODS']->content);
+        $xpath = new DOMXpath($dom);
+        $xpath->registerNamespace('mods', 'http://www.loc.gov/mods/v3');
         $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:GetParent';
-        $get_parent = $xml->xpath($xpath_expression);
+        $get_parent = $xpath->query($xpath_expression);
         if ($get_parent->length) {
           $get_parent_xml = trim($get_parent->item(0)->nodeValue);
           if ($params[2] == 'xml') {
             print $get_parent_xml;
           }
           if ($params[2] == 'json') {
-            // Parse out the value of the pointer from the stored XML.
-            $get_parent_element = new SimpleXMLElement($parent_pointer_xml);
-            $parent_pointer = $get_parent_element->getElementsByTagName('parent');
+            // Parse out the value of the pointer from the stored XML. The
+            // parent pointer is stored in XML, specifically, $get_parent_xml.
+            $parent_pointer_dom = new DOMDocument();
+            $parent_pointer_dom->loadXML($get_parent_xml);
+            $parent_pointer = $parent_pointer_dom->getElementsByTagName('parent');
             if ($parent_pointer->length) {
               print '{"parent":' . $parent_pointer->item(0)->nodeValue . '}';
             }
             else {
-              print $error_message . ' ## No parent pointer';
+              print $error_message;
             }
           }
         }
         else {
-          print $error_message . ' ## No parent element';
+          print $error_message;
         }
       }
       else {
-        print $error_message . ' ## No parent object MODS';
+        print $error_message;
       }
     }
     else {
-      print $error_message . ' ## No child object';
+      print $error_message;
     }
   }
   else {
-    print $error_message . ' ## No child PID';
+    print $error_message;
   }
 }
 

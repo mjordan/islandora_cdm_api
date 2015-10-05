@@ -189,7 +189,11 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // Test GetParent API call.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'GetParent/testcoll1/100/xml')));
     $this->assertResponse(200, 'Response OK');
-    $this->assertPattern('|5555|');
+    $this->assertPattern('|>5555<|');
+
+    $this->drupalGet('cdm_api', array('query' => array('c' => 'GetParent/testcoll1/100/json')));
+    $this->assertResponse(200, 'Response OK');
+    $this->assertPattern('|:5555|');
 
     // Test the getfile API call.
     $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/baz.jpg');
