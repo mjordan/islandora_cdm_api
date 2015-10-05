@@ -1,6 +1,0 @@
-<mods xmlns="http://www.loc.gov/mods/v3" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <titleInfo>
-        <title>Compound object 1</title>
-    </titleInfo>
-    <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/1000</identifier>
-</mods>

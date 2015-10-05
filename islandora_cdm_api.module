@@ -490,36 +490,51 @@ function islandora_cdm_api_getitemdmmodified(array $params) {
  *   An array containing the alias, pointer and format.
  */
 function islandora_cdm_api_getparent(array $params) {
-  if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
-    // We need to return the CONTENTdm pointer of the parent, not its
-    // Islandora PID. For a paged content model object, we do a query to get
-    // the PID of its parent (value of islandora:isPageOf), then see if
-    // that object has a CONTENTdm reference URL and if so, get the pointer
-    // from it. For a non-paged content model object, we get its parent
-    // by getting the value of its fedora:isConstituentOf relationship,
-    // and if the returned object has a CONTENTdm reference URL, get the
-    // pointer from it.
-    module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
-    $pointer = islandora_cdm_api_get_parent_pointer($islandora_object_pid, $params[0], $params[1]);
-    if ($params[2] == 'xml') {
-      drupal_add_http_header('Content-Type', 'text/xml');
-      print '<?xml version="1.0" encoding="UTF-8"?><parent>' . $pointer . '</parent>';
+  // CONTENTdm doesn't return a 404 if the object doesn't exist.
+  if ($params[2] == 'xml') {
+    drupal_add_http_header('Content-Type', 'text/xml');
+    $error_message = '<?xml version="1.0" encoding="UTF-8"?><parent>-1</parent>';
+  }
+  if ($params[2] == 'json') {
+    drupal_add_http_header('Content-Type', 'application/json');
+    $error_message = '{"parent":-1}';
+  }
+
+  // Load the object's MODS datastream and get the value of the <parent>
+  // element, if there is one.
+  if ($child_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
+    if ($child_object = islandora_object_load($child_pid)) {
+      // Load the object's MODS datastream, then check to see if there's
+      // a value in the <parent> element.
+      if (isset($parent_object['MODS'])) {
+        $xml = new SimpleXMLElement($parent_object['MODS']->content);
+        $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+        $xpath_expression = '//mods:extension/mods:CONTENTdmData/mods:parent';
+        $parent_pointer = $xml->xpath($xpath_expression);
+        if ($parent_pointer->length) {
+          $parent_pointer_value = trim($parent_pointer->item(0)->nodeValue);
+          if ($params[2] == 'xml') {
+            print '<?xml version="1.0" encoding="UTF-8"?><parent>' .
+              $parent_pointer_pointer . '</parent>';
+          }
+          if ($params[2] == 'json') {
+            print '{"parent":' . $parent_pointer_value . '}';
+          }
+        }
+        else {
+          print $error_message;
+        }
+      }
+      else {
+        print $error_message;
+      }
     }
-    if ($params[2] == 'json') {
-      drupal_add_http_header('Content-Type', 'application/json');
-      print '{"parent":' . $pointer . '}';
+    else {
+      print $error_message;
     }
   }
   else {
-    // CONTENTdm doesn't return a 404 if the object doesn't exist.
-    if ($params[2] == 'xml') {
-      drupal_add_http_header('Content-Type', 'text/xml');
-      print '<?xml version="1.0" encoding="UTF-8"?><parent>-1</parent>';
-    }
-    if ($params[2] == 'json') {
-      drupal_add_http_header('Content-Type', 'application/json');
-      print '{"parent":-1}';
-    }
+    print $error_message;
   }
 }
 
