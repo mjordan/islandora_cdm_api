@@ -77,3 +77,47 @@ function islandora_cdm_api_log_requests($path, $query = '') {
     watchdog('islandora_cdm_api', '%request', $variables);
   }
 }
+
+/**
+ * Construct a path to an image cached (or to be cached) on the filesystem.
+ *
+ * Also creates the cache directory if it doesn't exist.
+ *
+ * @param string $pid
+ *   The PID of the Islandora object.
+ * @param string $dsid
+ *   The datastream ID.
+ * @param string $mimetype
+ *   The datastream's MimeType.
+ *
+ * @return string
+ *   The stream wrapper URI for the file.
+ */
+function islandora_cdm_api_get_cached_image_uri($pid, $dsid, $mimetype) {
+  $cache_dir = 'temporary://' . ISLANDORA_CDM_API_CACHE_DIR;
+  file_prepare_directory($cache_dir, FILE_CREATE_DIRECTORY);
+  module_load_include('inc', 'islandora', 'includes/mimetype.utils');
+  $image_filename = preg_replace('/\W/', '_', $pid);
+  $image_extension = islandora_get_extension_for_mimetype($mimetype);
+  $image_uri = $cache_dir . DIRECTORY_SEPARATOR . $image_filename .
+    '_' . $dsid . '.' . $image_extension;
+  return $image_uri;
+}
+
+/**
+ * Confirms that the incoming pixel width, height, and scale
+ * values don't conflict.
+ *
+ * Also creates the cache directory if it doesn't exist.
+ *
+ * @param object $image
+ *   The image object.
+ * @param array $params
+ *   The request URL parameters.
+ *
+ * @return 
+ *
+ */
+function islandora_cdm_api_reconcile_scale($image, $params) {
+
+}

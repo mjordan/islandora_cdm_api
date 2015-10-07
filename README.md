@@ -14,14 +14,14 @@ The module is still under development but when complete will implement the follo
   * dmGetCollectionParameters (partial implementation: does not populate the 'path' data and always returns '2' or '-2' in 'rc')
 * Item level
   * dmGetCompoundObjectInfo (partial implmentation: XML output only)
-  * dmGetImageInfo (partial implementation: does not populate the 'filename' data)
+  * dmGetImageInfo (partial implementation: does not populate the 'filename' data; XML output only)
   * dmGetItemInfo (partial implementation: JSON output only)
   * dmQuery
   * GetItemDmmodified
   * GetParent
 * Utils
   * GetFile
-  * GetImage
+  * GetImage (partial implementation: DMSCALE, DMWIDTH, and DMHEIGHT parameters only)
   * GetStream
   * GetThumbnail
 
