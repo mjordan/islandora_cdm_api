@@ -583,31 +583,23 @@ function islandora_cdm_api_getfile($alias, $pointer, $filename) {
  * GetImage uses $_GET, not menu arguments.
  *
  * Note: Cdm sends a Transfer-Encoding: chunked header, with no
- * content-length, for images. @todo: Check this for file and stream as well. 
+ * content-length, for images. @todo: Check this for file and stream as well.
  */
 function islandora_cdm_api_getimage() {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   islandora_cdm_api_log_requests(current_path());
-  // @todo: Check for presence of all pararms.
-/*
-/utils/ajaxhelper/?CISOROOT=/km_2&CISOPTR=2050&action=2&DMSCALE=100&DMWIDTH=3474&DMHEIGHT=2400
-
-Array
-(
-    [CISOROOT] => hg
-    [CISOPTR] => 100
-    [action] => 2
-    [DMSCALE] => 100
-    [DMWIDTH] => 660
-    [DMHEIGHT] => 448
-)
-*/
   $params = drupal_get_query_parameters();
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params['CISOROOT'], $params['CISOPTR'])) {
-    drupal_not_found();
+    // If the alias or pointer is invalid (i.e., object doesn't exist),
+    // CONTENTdm returns a 200 with a Content-Length header with value 0.
+    drupal_add_http_header('Content-Length', 0);
+    print '';
+    drupal_exit();
   }
   if (!$object = islandora_object_load($islandora_object_pid)) {
-    drupal_not_found();
+    drupal_add_http_header('Content-Length', 0);
+    print '';
+    drupal_exit();
   }
 
   $cmodels = $object->models;
@@ -615,21 +607,21 @@ Array
     case 'islandora:sp_basic_image';
       $dsid = 'OBJ';
       break;
+
     case 'islandora:sp_large_image_cmodel';
       $dsid = 'JPG';
       break;
+
     case 'islandora:pageCModel';
       $dsid = 'JPG';
       break;
+
     default:
       // CONTENTdm returns a 0-length body when the object has no image.
       drupal_add_http_header('Content-Length', 0);
       print '';
   }
 
-  // Load object
-  // See if the datastream content alrady exists in ISLANDORA_CDM_API_CACHE_DIR with image_save()
-  //   If it doesn't, save it there.
   $mimetype = $object[$dsid]->mimetype;
   $image_path = islandora_cdm_api_get_cached_image_uri($islandora_object_pid, $dsid, $mimetype);
   $real_path = drupal_realpath($image_path);
@@ -637,16 +629,17 @@ Array
     file_unmanaged_save_data($object[$dsid]->content, $image_path, FILE_EXISTS_REPLACE);
   }
   $image = image_load($real_path);
-  // @todo: Reconcile width, height, and scale values.
-  // ? = islandora_cdm_api_reconcile_scale($image, $params);
-  image_imagemagick_resize($image, 50, 50);
+  $pixel_dimensions = islandora_cdm_api_get_resize_values($image, $params);
+  image_imagemagick_resize($image, $pixel_dimensions['width'], $pixel_dimensions['height']);
   $resized_image_path = $image_path . '.' . drupal_random_key(5);
   image_save($image, $resized_image_path);
-  // Serve to client
-  $headers = array();
-  transfer_file($resized_image_path, $headers);
+  $resized_image = image_load($real_path);
+  drupal_add_http_header('Content-Length', $resized_image->info['file_size']);
+  drupal_add_http_header('Content-Type', $resized_image->info['mime_type']);
+  readfile($resized_image->source);
   // Delete modified image file from ISLANDORA_CDM_API_CACHE_DIR.
   // file_unmanaged_delete($image_path);
+  drupal_exit();
 }
 
 /**

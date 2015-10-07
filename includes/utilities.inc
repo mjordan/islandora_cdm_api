@@ -105,19 +105,36 @@ function islandora_cdm_api_get_cached_image_uri($pid, $dsid, $mimetype) {
 }
 
 /**
- * Confirms that the incoming pixel width, height, and scale
- * values don't conflict.
+ * Determine the pixel width and height to pass to image_imagemagick_resize().
  *
- * Also creates the cache directory if it doesn't exist.
+ * Tests against the CONTENTdm API show that CONTENTdm scales the image before
+ * it resizes it to the specified pixel width and height. In other words, it
+ * performs two separate resizing operations. However, this module can only
+ * (for performnance reasons) perform a single resizing operation. SFU's use
+ * case is limited to retrieving a version of the image at original size or
+ * at a smaller size with the original aspect ratio. To work around this
+ * conflict such that we can provide image_imagemagick_resize() with one set
+ * of specific pixel dimensions, we need to inspect the value of DMSCALE, and
+ * if it is different than 100%, adjust the incoming width and height values
+ * accordingly to hand off to image_resize().
  *
  * @param object $image
  *   The image object.
  * @param array $params
- *   The request URL parameters.
+ *   The request GetImage URL parameters.
  *
- * @return 
- *
+ * @return array
+ *   An associative array containing the adjusted width and height values.
  */
-function islandora_cdm_api_reconcile_scale($image, $params) {
-
+function islandora_cdm_api_get_resize_values($image, array $params) {
+  $dimensions = array();
+  if ($params['DMSCALE'] == '100') {
+    $dimensions['width'] = $params['DMWIDTH'];
+    $dimensions['height'] = $params['DMHEIGHT'];
+  }
+  else {
+    $dimensions['width'] = round($params['DMWIDTH'] * $params['DMSCALE'] / 100);
+    $dimensions['height'] = round($params['DMHEIGHT'] * $params['DMSCALE'] / 100);
+  }
+  return $dimensions;
 }
