@@ -4,6 +4,8 @@
 
 This Islandora module provides an API compatible with the [CONTENTdm Web API](http://www.contentdm.org/help6/custom/customize2a.asp). It is intended to provide uninterupted access to content migrated from CONTENTdm to Islandora by allowing client applications consuming the CONTENTdm Web API to continue to function after the migration. In effect this module pretends to be the CONTENTdm web API endpoint. Your apps ask questions of the CONTENTdm API, but the answers come from Islandora.
 
+This module was developed to allow Simon Fraser University Library to continue to use the CONTENTdm Web API on a couple of Drupal websites after they replaced CONTENTdm with Islandora. It will not be of much use to others, except perhaps as an example. Note that in order for it to work, data in your Islandora instance must meet specific requirements, detailed below in the Dependencies section of thie README. You will not be able to use this module without meeting those requirements.
+
 The module is still under development but when complete will implement the following subset of the CONTENTdm API:
 
 * Server level
@@ -25,6 +27,8 @@ The module is still under development but when complete will implement the follo
   * GetStream
   * GetThumbnail
 
+## Dependencies
+
 For the Islandora CONTENTdm API to work, the following conditions must be in place:
 
 * Islandora will need to store the identifiers from the migrated CONTENTdm objects such that this module can query them, for example as CONTENTdm reference URLs in the Islandora objects' MODS metadata (e.g., in an &lt;identifer&gt; element):
@@ -34,10 +38,9 @@ For the Islandora CONTENTdm API to work, the following conditions must be in pla
     <identifier type="uri" invalid="yes" displayLabel="Migrated From">http://contentdm.example.com/cdm/ref/collection/testcoll1/id/100</identifier>
 </mods>
 ```
-* Islandora objects need a datastream with the DS ID 'CDMITEMINFO' containing the JSON output of dmGetItemInfo for the corresponding CONTENTdm object.
 * Islandora collection objects corresponding to CONTENTdm collections need a datastream with the DS ID 'CDMFIELDINFO' containing the JSON output of dmGetCollectionFieldInfo for the corresponding collection.
 * Islandora collection objects corresponding to CONTENTdm collections need PIDs that use the CONTENTdm collection alias as the namespace, and the string 'collection' as the rest of the PID, e.g., 'art:collection'.
-* Compound Islandora objects need a datastream with the DS ID 'CDMCPD' containing the XML output of dmGetCompoundObjectInfo for the corrsponding CONTENTdm object.
+* Islandora objects' MODS datastreams must contain `<extension>` elemements that contain the JSON output of `dmGetItemInfo`, `dmGetCompoundObjectInfo`, and `GetParent`. Specific requirements are documented on the [Move to Islandora Kit wiki](https://github.com/MarcusBarnes/mik/wiki/Metadata-manipulator:-AddContentdmData).
 * Client applications that consume the CONTENTdm Web API and that intend to consume the compatible API provided by this module will need to replace base URLs to the API on their CONTENTdm server (e.g., http://contentdm.example.com:81/dmwebservices/index.php?q=) with URLs like http://islandora.sample.com/cdm_api?c=. For requests to the "Utils" (GetFile, GetImage, GetStream, and GetThumbnail), clients will need to replace their "website" base URLs (e.g., http://example.com[:80]) URLs like http://islandora.sample.com/cdm_api/. The query paths of the requests within the client applications will not need to be changed - only the base URLs.
 
 ![How the Islandora CONTENTdm API module works](https://dl.dropboxusercontent.com/u/1015702/linked_to/IslandoraCONTENTdmAPIModuleActivityDiagram.png)
