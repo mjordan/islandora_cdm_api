@@ -24,6 +24,6 @@ before_install:
 script:
   - ant -buildfile sites/all/modules/islandora_cdm_api/build.xml lint
   - $ISLANDORA_DIR/tests/scripts/line_endings.sh sites/all/modules/islandora_cdm_api
-  - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_cdm_api
+  # - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_cdm_api
   - phpcpd --names *.module,*.inc,*.test sites/all/modules/islandora_cdm_api
   - drush test-run --uri=http://localhost:8081 --debug --verbose "Islandora CONTENTdm API"
