@@ -207,11 +207,19 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // @todo: Add test for dmQuery.
     // @todo: Add test for getstream.
     // Test for getimage API call.
-    // @todo: Add tests for non-100, original size requests.
-    $this->drupalGet('cdm_api/utils/ajaxhelper/?CISOROOT=testcoll1&CISOPTR=100&action=2&DMSCALE=100&DMWIDTH=500&DMHEIGHT=334');
+    // @todo: Add tests for non-100 scale, non-original size requests.
+    $this->drupalGet('cdm_api/utils/ajaxhelper/', array(
+      'query' => array(
+        'CISOROOT' => 'testcoll1',
+        'CISOPTR' => '100',
+        'action' => '2',
+        'DMSCALE' => '100',
+        'DMWIDTH' => '500',
+        'DMHEIGHT' => '334',
+      ),
+    ));
     $this->assertResponse(200, 'Response OK');
-    $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Thumbnail has a size of 98885 bytes.');
-
+    $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Image has a size of 98885 bytes.');
   }
 
 }
