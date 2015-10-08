@@ -180,8 +180,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Requested item not found|');
 
-    // @todo: Add test for dmQuery.
-    // @todo: Add test for GetItemDmmodified.
+    // Test the GetItemDmmodified API call.
     $this->drupalGet('cdm_api', array('query' => array('c' => 'GetItemDmmodified/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|"\d\d\d\d\-\d\d\-\d\d"|');
@@ -200,12 +199,19 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertResponse(200, 'Response OK');
     $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Thumbnail has a size of 98885 bytes.');
 
-    // @todo: Add test for getimage.
-    // @todo: Add test for getstream.
     // Test the getthumbnail API call.
     $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
     $this->assertResponse(200, 'Response OK');
     $this->assertEqual($this->drupalGetHeader('Content-Length'), 2321, 'Thumbnail has a size of 2321 bytes.');
+
+    // @todo: Add test for dmQuery.
+    // @todo: Add test for getstream.
+    // Test for getimage API call.
+    // @todo: Add tests for non-100, original size requests.
+    $this->drupalGet('cdm_api/utils/ajaxhelper/?CISOROOT=testcoll1&CISOPTR=100&action=2&DMSCALE=100&DMWIDTH=500&DMHEIGHT=334');
+    $this->assertResponse(200, 'Response OK');
+    $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Thumbnail has a size of 98885 bytes.');
+
   }
 
 }
