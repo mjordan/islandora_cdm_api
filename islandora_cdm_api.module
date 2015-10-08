@@ -624,22 +624,35 @@ function islandora_cdm_api_getimage() {
 
   $mimetype = $object[$dsid]->mimetype;
   $image_path = islandora_cdm_api_get_cached_image_uri($islandora_object_pid, $dsid, $mimetype);
-  $real_path = drupal_realpath($image_path);
-  if (!file_exists($real_path)) {
+  $real_image_path = drupal_realpath($image_path);
+  if (!file_exists($real_image_path)) {
     file_unmanaged_save_data($object[$dsid]->content, $image_path, FILE_EXISTS_REPLACE);
   }
-  $image = image_load($real_path);
-  $pixel_dimensions = islandora_cdm_api_get_resize_values($image, $params);
-  image_imagemagick_resize($image, $pixel_dimensions['width'], $pixel_dimensions['height']);
-  $resized_image_path = $image_path . '.' . drupal_random_key(5);
-  image_save($image, $resized_image_path);
-  $resized_image = image_load($real_path);
-  drupal_add_http_header('Content-Length', $resized_image->info['file_size']);
-  drupal_add_http_header('Content-Type', $resized_image->info['mime_type']);
-  readfile($resized_image->source);
-  // Delete modified image file from ISLANDORA_CDM_API_CACHE_DIR.
-  // file_unmanaged_delete($image_path);
-  drupal_exit();
+  $full_size_image = image_load($real_image_path);
+  // If the request is for the full-sized image, don't resize it,
+  // just send the existing image to the client.
+  if (($params['DMSCALE'] == '100') &&
+    ($params['DMWIDTH'] == $full_size_image->info['width']) &&
+    ($params['DMHEIGHT'] == $full_size_image->info['height'])) {
+    drupal_add_http_header('Content-Length', $full_size_image->info['file_size']);
+    drupal_add_http_header('Content-Type', $full_size_image->info['mime_type']);
+    readfile($full_size_image->source);
+    drupal_exit();
+  }
+  // If it's not, resize it and send to client.
+  else {
+    $pixel_dimensions = islandora_cdm_api_get_resize_values($full_size_image, $params);
+    $resized_image = image_load($real_image_path);
+    image_imagemagick_resize($resized_image, $pixel_dimensions['width'], $pixel_dimensions['height']);
+    $resized_image_path = $image_path . '.' . drupal_random_key(5);
+    image_save($resized_image, $resized_image_path);
+    drupal_add_http_header('Content-Length', $resized_image->info['file_size']);
+    drupal_add_http_header('Content-Type', $resized_image->info['mime_type']);
+    readfile($resized_image_path);
+    // Delete modified image file from ISLANDORA_CDM_API_CACHE_DIR.
+    // file_unmanaged_delete($image_path);
+    drupal_exit();
+  }
 }
 
 /**
