@@ -707,6 +707,10 @@ function islandora_cdm_api_getstream($alias, $pointer) {
     $dsid = 'MP4';
     $mimetype = 'video/mp4';
   }
+  if (isset($object['OBJ'])) {
+    $dsid = 'OBJ';
+    $mimetype = 'video/mp4';
+  }
   // Formats supported by Islandora's Audio Solution Pack.
   if (isset($object['PROXY_MP3'])) {
     $dsid = 'PROXY_MP3';
