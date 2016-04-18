@@ -34,7 +34,32 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
 }
 
 /**
+ * Performs a browse query against Islandora's Solr index.
+ */
+function islandora_cdm_api_browse_solr() {
+  $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
+}
+
+/**
+ * Performs a keyword query against Islandora's Solr index.
+ */
+function islandora_cdm_api_search_solr() {
+  $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
+}
+
+/**
  * Query the resource index to get a list of collections.
+ *
+ * @todo: Filter out other unwanted collections.
+ *
+ * @return array
+ *   List of PIDs corresponding to the collections or content models.
+ */
+
+/**
+ * Query the resource index to get a list of collections.
+ *
+ * @todo: Filter out other unwanted collections.
  *
  * @return array
  *   List of PIDs corresponding to the collections or content models.
@@ -61,7 +86,7 @@ function islandora_cdm_api_get_collections() {
 }
 
 /**
- * Query the resource index to get a list of collections.
+ * Log API requests.
  *
  * @param string $path
  *   The current URL path.

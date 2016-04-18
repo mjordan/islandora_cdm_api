@@ -469,6 +469,44 @@ function islandora_cdm_api_dmquery(array $params) {
   // $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0',
   // $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0',
   // $format = 'json'.
+
+  // The CONTENTdm fields retrieved in browses and searches are
+  // title!creato!date!subjec!descri. These can be hard-mapped to Solr
+  // fields for now.
+
+  /*
+  This is the CONTENTdm query map for a browse:
+Array
+(
+    [alias] => icohc
+    [searchstrings] => 0
+    [fields] => title!creato!date!subjec!descri
+    [sortby] => date!title!creato
+    [maxrecs] => 10
+    [start] => 1
+    [supress] => 1
+    [docptr] => 0
+    [suggest] => 0
+    [facets] => 0
+    [format] => json
+)
+
+  And this is the query map from a keyword search:
+Array
+(
+    [alias] =>
+    [searchstrings] => CISOSEARCHALL^just+testing^all
+    [fields] => title!creato!date!subjec!descri
+    [sortby] => date!title!creato
+    [maxrecs] => 10
+    [start] => 1
+    [supress] => 0
+    [docptr] => 0
+    [suggest] => 0
+    [facets] => 0
+    [format] => json
+)
+  */
 }
 
 /**
