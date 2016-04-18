@@ -122,26 +122,26 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     $this->assertTrue($match, 'Search results were found');
 
     // Test dmGetDublinCoreFieldInfo API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/xml')));
     $this->assertResponse(200, 'Response OK');
     $match = preg_match('|Identifier|', $this->drupalGetContent());
     $this->assertTrue($match, 'Pattern |Identifier| found');
 
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetDublinCoreFieldInfo/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Identifier|');
 
     // Test dmGetCollectionFieldInfo API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetCollectionFieldInfo/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Title|');
 
     // Test dmGetCollectionParameters API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/xml')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
 
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetCollectionParameters/mycollection/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|My Test Collection|');
 
@@ -155,7 +155,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
       array('testcoll3', '300'),
     );
     foreach ($original_cdm_ids as $ids) {
-      $this->drupalGet('cdm_api', array(
+      $this->drupalGet('cdm/api', array(
         'query' => array('c' => 'dmGetCompoundObjectInfo/' . $ids[0] . '/' . $ids[1] . '/xml')));
       $this->assertResponse(200, 'Response OK');
       // Check for the Cdm object's 'pointer' in the CPD datastream's output.
@@ -163,44 +163,44 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     }
 
     // Test dmGetImageInfo API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/xml')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/xml')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|334|');
 
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetImageInfo/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Record does not exist|');
 
     // Test the dmGetItemInfo API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetItemInfo/testcoll1/100/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetItemInfo/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|private study|');
 
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'dmGetItemInfo/testcoll2/200/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'dmGetItemInfo/testcoll2/200/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|Requested item not found|');
 
     // Test the GetItemDmmodified API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'GetItemDmmodified/testcoll1/100/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'GetItemDmmodified/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|"\d\d\d\d\-\d\d\-\d\d"|');
 
     // Test GetParent API call.
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'GetParent/testcoll1/100/xml')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'GetParent/testcoll1/100/xml')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|>5555<|');
 
-    $this->drupalGet('cdm_api', array('query' => array('c' => 'GetParent/testcoll1/100/json')));
+    $this->drupalGet('cdm/api', array('query' => array('c' => 'GetParent/testcoll1/100/json')));
     $this->assertResponse(200, 'Response OK');
     $this->assertPattern('|:5555|');
 
     // Test the getfile API call.
-    $this->drupalGet('cdm_api/utils/getfile/collection/testcoll1/id/100/filename/baz.jpg');
+    $this->drupalGet('cdm/utils/getfile/collection/testcoll1/id/100/filename/baz.jpg');
     $this->assertResponse(200, 'Response OK');
     $this->assertEqual($this->drupalGetHeader('Content-Length'), 98885, 'Thumbnail has a size of 98885 bytes.');
 
     // Test the getthumbnail API call.
-    $this->drupalGet('cdm_api/utils/getthumbnail/collection/testcoll1/id/100');
+    $this->drupalGet('cdm/utils/getthumbnail/collection/testcoll1/id/100');
     $this->assertResponse(200, 'Response OK');
     $this->assertEqual($this->drupalGetHeader('Content-Length'), 2321, 'Thumbnail has a size of 2321 bytes.');
 
@@ -208,7 +208,7 @@ class IslandoraCdmApiTestCase extends IslandoraCollectionWebTestCase {
     // @todo: Add test for getstream.
     // Test for getimage API call.
     // @todo: Add tests for non-100 scale, non-original size requests.
-    $this->drupalGet('cdm_api/utils/ajaxhelper/', array(
+    $this->drupalGet('cdm/utils/ajaxhelper/', array(
       'query' => array(
         'CISOROOT' => 'testcoll1',
         'CISOPTR' => '100',

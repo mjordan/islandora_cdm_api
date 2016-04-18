@@ -28,33 +28,33 @@ function islandora_cdm_api_menu() {
   // the incoming request's query (?c=) to be a single string that we
   // parse to get the "parameters". We can't use ?q= because Drupal uses
   // it already for its parameters.
-  $items['cdm_api'] = array(
+  $items['cdm/api'] = array(
     'title' => 'CONTENTdm API',
     'page callback' => 'islandora_cdm_api_router',
     'access arguments' => array('access contentdm api'),
     'type' => MENU_CALLBACK,
   );
-  $items['cdm_api/utils/getfile/collection/%/id/%/filename/%'] = array(
+  $items['cdm/utils/getfile/collection/%/id/%/filename/%'] = array(
     'title' => 'GetFile',
     'page callback' => 'islandora_cdm_api_getfile',
     'page arguments' => array(4, 6, 8),
     'access arguments' => array('access contentdm api'),
     'type' => MENU_CALLBACK,
   );
-  $items['cdm_api/utils/ajaxhelper'] = array(
+  $items['cdm/utils/ajaxhelper'] = array(
     'title' => 'GetImage',
     'page callback' => 'islandora_cdm_api_getimage',
     'access arguments' => array('access contentdm api'),
     'type' => MENU_CALLBACK,
   );
-  $items['cdm_api/utils/getstream/collection/%/id/%'] = array(
+  $items['cdm/utils/getstream/collection/%/id/%'] = array(
     'title' => 'GetStream',
     'page callback' => 'islandora_cdm_api_getstream',
     'page arguments' => array(4, 6),
     'access arguments' => array('access contentdm api'),
     'type' => MENU_CALLBACK,
   );
-  $items['cdm_api/utils/getthumbnail/collection/%/id/%'] = array(
+  $items['cdm/utils/getthumbnail/collection/%/id/%'] = array(
     'title' => 'GetThumbnail',
     'page callback' => 'islandora_cdm_api_getthumbnail',
     'page arguments' => array(4, 6),
@@ -118,12 +118,15 @@ function islandora_cdm_api_admin_settings() {
  * way, we route them through a single menu callback.
  */
 function islandora_cdm_api_router() {
+  $not_recognized_message = t('Your request to the CONTENTdm API was not recognized.');
   // The string we want is the only key ('c') in the query.
   $query = drupal_get_query_parameters();
+  if (!isset($query['c'])) {
+    return $not_recognized_message;
+  }
   $query_string = $query['c'];
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   islandora_cdm_api_log_requests(current_path(), $query_string);
-  $not_recognized_message = t('Your request to the CONTENTdm API was not recognized.');
   if (!count($query)) {
     return $not_recognized_message;
   }
@@ -339,11 +342,13 @@ function islandora_cdm_api_dmgetimageinfo(array $params) {
   module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
   if (!$islandora_object_pid = islandora_cdm_api_map_request_to_pid($params[0], $params[1])) {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+    drupal_exit();
   }
   // Contrary to the API documentation, CONTENTdm returns this error XML
   // if you ask for 'json'.
   if ($params[2] == 'json') {
     print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
+    drupal_exit();
   }
   $object = islandora_object_load($islandora_object_pid);
   $object_cmodels = $object->models;
@@ -352,7 +357,7 @@ function islandora_cdm_api_dmgetimageinfo(array $params) {
     $dsid = 'OBJ';
   }
   // This approach prefers JPG2, then JPG, then OBJ.
-  if ($object_cmodels[0] == 'islandora:sp_large_image_cmodel') {
+  elseif ($object_cmodels[0] == 'islandora:sp_large_image_cmodel') {
     if (isset($object['JP2'])) {
       $dsid = 'JP2';
     }
@@ -365,6 +370,22 @@ function islandora_cdm_api_dmgetimageinfo(array $params) {
     else {
       // @todo: drupal_not_found ?
     }
+  }
+  // For non-image content models.
+  else {
+    $xml = new XMLWriter();
+    $xml->openMemory();
+    $xml->startDocument('1.0', 'UTF-8');
+    $xml->startElement('imageinfo');
+    $xml->writeElement('filename', '');
+    $xml->writeElement('type', '');
+    $xml->writeElement('width', 0);
+    $xml->writeElement('height', 0);
+    $xml->writeElement('title', $object->label);
+    $xml->endElement();
+    drupal_add_http_header('Content-Type', 'text/xml; utf-8');
+    print $xml->outputMemory();
+    drupal_exit();
   }
 
   // Get the image datastream content and save it to a file.
