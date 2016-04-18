@@ -34,16 +34,11 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
 }
 
 /**
- * Performs a browse query against Islandora's Solr index.
+ * Performs a browse or search query against Islandora's Solr index.
+ *
+ * Returns a set of records.
  */
-function islandora_cdm_api_browse_solr() {
-  $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
-}
-
-/**
- * Performs a keyword query against Islandora's Solr index.
- */
-function islandora_cdm_api_search_solr() {
+function islandora_cdm_api_query_solr($query) {
   $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
 }
 
@@ -163,3 +158,29 @@ function islandora_cdm_api_get_resize_values($image, array $params) {
   }
   return $dimensions;
 }
+
+/**
+ * Takes in a string that contains one mapping per line, returns an array.
+ *
+ * @param string $string
+ *   The string to split into an array.
+ * @parem string $delimiter
+ *   The delimiter.
+ *
+ * @return array
+ *   An associative array created from the string.
+ */
+function islandora_cdm_api_get_mapping_from_string($string, $delimiter) {
+  $map = array();
+  $list = preg_split('/$\R?^/m', $string);
+  foreach ($list as $mapping) {
+    list($left, $right) = explode($delimiter, $mapping);
+    $left = trim($left);
+    $right = trim($right);
+    if (strlen($left)) {
+      $map[$left] = $right;
+    }
+  }
+  return $map;
+}
+

@@ -97,6 +97,22 @@ function islandora_cdm_api_admin_settings() {
     '#description' => t('The element to specify in the Solr query to find CONTENTdm reference URLs. MODS <identifier> elements get mapped to dc.identifer automatically, so if your MODS stores the CONTENTdm reference URLs there, use dc.identifier.'),
     '#maxlength' => 60,
   );
+  $form['islandora_cdm_api_alias_to_pid_mappings'] = array(
+    '#title' => t('CONTENTdm alias to Islandora collection PID mappings'),
+    '#type' => 'textarea',
+    '#rows' => 10,
+    '#default_value' => variable_get('islandora_cdm_api_alias_to_pid_mappings', ''),
+    '#description' => t('Alias to collection PID mappings for use in Solr queries. One line per mapping, in the form alias,pid. Aliases should not begin with a /.'),
+    '#maxlength' => 60,
+  );
+  $form['islandora_cdm_api_field_to_field_mappings'] = array(
+    '#title' => t('CONTENTdm field to Solr field mappings'),
+    '#type' => 'textarea',
+    '#rows' => 10,
+    '#default_value' => variable_get('islandora_cdm_api_field_to_field_mappings', ''),
+    '#description' => t('CONTETNdm field nickname to Solr fieldn name mappings for use in Solr queries. One line per mapping, in the form field,field.'),
+    '#maxlength' => 60,
+  );
   $form['islandora_cdm_api_log_requests'] = array(
     '#type' => 'checkbox',
     '#title' => t('Log requests to the CONTENTdm API'),
@@ -459,6 +475,8 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
 /**
  * CONTENTdm API callback.
  *
+ * Converts an incoming CONTENTdm API query into a Solr query.
+ *
  * @param array $params
  *   An array containing the alias, searchstrings, fields,
  *   sortby, maxrecs, start, suppress, docptr, suggest,
@@ -469,10 +487,16 @@ function islandora_cdm_api_dmquery(array $params) {
   // $maxrecs = '1024', $start = '0', $supress = '0', $docptr = '0',
   // $suggest = '0', $facets = '0', $showunpub = '0', $denormalizedFacets = '0',
   // $format = 'json'.
+  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
+
+  $aliases_setting = variable_get('islandora_cdm_api_alias_to_pid_mappings', '');
+  $alias_to_pid_map = islandora_cdm_api_get_mapping_from_string($aliases_setting, ',');
 
   // The CONTENTdm fields retrieved in browses and searches are
-  // title!creato!date!subjec!descri. These can be hard-mapped to Solr
-  // fields for now.
+  // title!creato!date!subjec!descri.
+
+  $fields_setting = variable_get('islandora_cdm_api_field_to_field_mappings', '');
+  $field_map = islandora_cdm_api_get_mapping_from_string($fields_setting, ',');
 
   /*
   This is the CONTENTdm query map for a browse:
@@ -757,28 +781,4 @@ function islandora_cdm_api_getstream($alias, $pointer) {
   drupal_add_http_header('Content-Type', $mimetype);
   drupal_add_http_header('Content-Length', $object[$dsid]->size);
   print $object[$dsid]->content;
-}
-
-/**
- * CONTENTdm API callback.
- *
- * @param string $alias
- *   The CONTENTdm alias.
- * @param string $pointer
- *   The CONTENTdm pointer.
- */
-function islandora_cdm_api_getthumbnail($alias, $pointer) {
-  module_load_include('inc', 'islandora_cdm_api', 'includes/utilities');
-  islandora_cdm_api_log_requests(current_path());
-  if ($islandora_object_pid = islandora_cdm_api_map_request_to_pid($alias, $pointer)) {
-    module_load_include('inc', 'islandora', 'includes/datastream');
-    // Load the Islandora object.
-    $object = islandora_object_load($islandora_object_pid);
-    // Get its TN datastream and return its content to client.
-    $tn = islandora_datastream_load('TN', $object);
-    islandora_download_datastream($tn);
-  }
-  else {
-    print '<?xml version="1.0" encoding="UTF-8"?><error>Record does not exist</error>';
-  }
 }
