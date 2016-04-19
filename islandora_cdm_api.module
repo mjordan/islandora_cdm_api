@@ -104,11 +104,12 @@ function islandora_cdm_api_admin_settings() {
     '#default_value' => variable_get('islandora_cdm_api_alias_to_pid_mappings', ''),
     '#description' => t('Alias to collection PID mappings for use in Solr queries. One line per mapping, in the form alias,pid. Aliases should not begin with a /.'),
   );
+  $field_mappings_default = "title,dc.title\ncreato,dc.creator\ndate,dc.date\nsubjec,dc.subject\ndescri,dc.description";
   $form['islandora_cdm_api_field_to_field_mappings'] = array(
     '#title' => t('CONTENTdm field to Solr field mappings'),
     '#type' => 'textarea',
     '#rows' => 10,
-    '#default_value' => variable_get('islandora_cdm_api_field_to_field_mappings', ''),
+    '#default_value' => variable_get('islandora_cdm_api_field_to_field_mappings', $field_mappings_default),
     '#description' => t('CONTETNdm field nickname to Solr field name mappings for use in Solr queries. One line per mapping, in the form field,field.'),
   );
   $form['islandora_cdm_api_log_requests'] = array(
@@ -496,25 +497,11 @@ function islandora_cdm_api_dmquery(array $params) {
   $alias_to_pid_map = islandora_cdm_api_get_mapping_from_string($aliases_setting, ',');
 
   // The CONTENTdm fields retrieved in browses and searches are
-  // title!creato!date!subjec!descri.
+  // title!creato!date!subjec!descri. This is configurable by
+  // the consumer.
 
   $fields_setting = variable_get('islandora_cdm_api_field_to_field_mappings', '');
   $field_map = islandora_cdm_api_get_mapping_from_string($fields_setting, ',');
-
-  // If $params[1 ('searchstrings') is 0, we have a browse; if it's not, we have
-  // a search.
-  if ($params[1] == '0') {
-    // First build the collection query. In a browse there will be only
-    // one collection.
-    $alias = $params[0];
-    $collection = 'info:fedora/' . $alias_to_pid_map[$alias];
-    $collection = preg_replace('/:/', '\:', $collection);
-    $collection_query = 'RELS_EXT_isMemberOfCollection_uri_t:' . $collection;
-    // Then build the field list.
-
-    // Then the sort list.
-  }
-
 
   /*
   This is the CONTENTdm query map for a browse:
@@ -549,6 +536,57 @@ Array
     [format] => json
 )
   */
+
+  // If $params[1] ('searchstrings') is 0, we have a browse; if it's not,
+  // we have a search. Let's build the common parts first.
+
+  // The field list.
+  $fl_array = array();
+  $cdm_fields = explode('!', $params[2]);
+  foreach ($cdm_fields as $cdm_field) {
+    $fl_array[] = $field_map[$cdm_field];
+  }
+  $fl_string = 'fl=' . implode(',', $fl_array);
+
+  // Then the sort list. We only support asc.
+  $sort_array = array();
+  $cdm_sortby_fields = explode('!', $params[3]);
+  foreach ($cdm_sortby_fields as $cdm_sortby_field) {
+    $sort_array[] = $field_map[$cdm_sortby_field] . '+asc';
+  }
+  $sort_string = 'sort=' . implode(',', $sort_array); 
+
+  $solr_browse_query = 'q=' . $collection_query . '&' . $fl_string . '&' .
+    $sort_string; 
+
+  // Then add the number of results to return and the pagination.
+  // CONTENTdm pagers start counting at 1, Solr's at 0.
+  $start = $params[5] - 1;
+  // Common parts done.
+ 
+  // Browse query. 
+  if ($params[1] == '0') {
+    // First build the collection query. In a browse there will be only
+    // one collection.
+    $alias = $params[0];
+    $collection = 'info:fedora/' . $alias_to_pid_map[$alias];
+    // Escape those colons.
+    $collection = preg_replace('/:/', '\:', $collection);
+    // We assume the object is in only one collection, as it was in
+    // CONTENTdm.
+    $collection_query = 'RELS_EXT_isMemberOfCollection_uri_t:' . $collection;
+    $solr_browse_query .= '&rows=' . $params[4] . '&start=' . $start;
+    $query = $solr_browse_query;
+  }
+  else {
+    // First build the collection query. In a search there may be more
+    // than one collection.
+
+    // Build search strings.
+
+    $query = $solr_search_query;
+  }
+  // @todo: Send query to Solr, get results and return them.
 }
 
 /**
