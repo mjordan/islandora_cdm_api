@@ -523,7 +523,7 @@ Array
   And this is the query map from a keyword search:
 Array
 (
-    [alias] =>
+    [alias] => icohc!km2!kmpassenger
     [searchstrings] => CISOSEARCHALL^just+testing^all
     [fields] => title!creato!date!subjec!descri
     [sortby] => date!title!creato
@@ -546,7 +546,7 @@ Array
   foreach ($cdm_fields as $cdm_field) {
     $fl_array[] = $field_map[$cdm_field];
   }
-  $fl_string = 'fl=' . implode(',', $fl_array);
+  $fl_string = '&fl=' . implode(',', $fl_array);
 
   // Then the sort list. We only support asc.
   $sort_array = array();
@@ -554,15 +554,13 @@ Array
   foreach ($cdm_sortby_fields as $cdm_sortby_field) {
     $sort_array[] = $field_map[$cdm_sortby_field] . '+asc';
   }
-  $sort_string = 'sort=' . implode(',', $sort_array); 
-
-  $solr_browse_query = 'q=' . $collection_query . '&' . $fl_string . '&' .
-    $sort_string; 
-
+  $sort_string = '&sort=' . implode(',', $sort_array); 
   // Then add the number of results to return and the pagination.
   // CONTENTdm pagers start counting at 1, Solr's at 0.
   $start = $params[5] - 1;
-  // Common parts done.
+  $pager = '&rows=' . $params[4] . '&start=' . $start;
+
+  // Common parts are now done. Move on to the browse or search query.
  
   // Browse query. 
   if ($params[1] == '0') {
@@ -575,16 +573,41 @@ Array
     // We assume the object is in only one collection, as it was in
     // CONTENTdm.
     $collection_query = 'RELS_EXT_isMemberOfCollection_uri_t:' . $collection;
-    $solr_browse_query .= '&rows=' . $params[4] . '&start=' . $start;
-    $query = $solr_browse_query;
+    $browse_query = 'q=' . $collection_query . $fl_string . $sort_string . $pager;
   }
+  // Search query. 
   else {
     // First build the collection query. In a search there may be more
     // than one collection.
+    if (strpos($params[0], '!')) {
+      $alias_list = explode('!', $params[0]);
+    }
+    else {
+      $alias_list[] = $params[0];
+    }
+    // @todo: All we have is a list, we need to figure out how to express
+    // for a solr query and define $collection_query. Or the collection
+    // strings in field RELS_EXT_isMemberOfCollection_uri_t?
 
-    // Build search strings.
+    // Build search strings (keywords). 
+    $searchstrings = preg_replace('/CISOSEARCHALL\^/', '', $params[1]);
+    preg_match('/\^(.+)$/', $searchstrings, $matches);
+    $operator = $matches[1];
+    $searchstrings = preg_replace('/\^.+$/', '', $searchstrings);
+    if ($operator == 'all') {
+      $searchstrings = preg_replace('/\s/', '+', $searchstrings);
+      $searchstrings = '+' . $searchstrings;
+    }
+    if ($operator == 'any') {
+      $searchstrings = preg_replace('/\s/', '%20', $searchstrings);
+    }
+    if ($operator == 'exact') {
+      $searchstrings = preg_replace('/\s/', ' ', $searchstrings);
+      $searchstrings = '"' . $searchstrings . '"';
+    }
+    $keywords_query = $searchstrings;
 
-    $query = $solr_search_query;
+    $search_query = 'q=' . $keywords_query . $collection_list . $fl_string . $sort_string . $pager;
   }
   // @todo: Send query to Solr, get results and return them.
 }
