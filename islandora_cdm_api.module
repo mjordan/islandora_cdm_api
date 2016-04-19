@@ -103,15 +103,13 @@ function islandora_cdm_api_admin_settings() {
     '#rows' => 10,
     '#default_value' => variable_get('islandora_cdm_api_alias_to_pid_mappings', ''),
     '#description' => t('Alias to collection PID mappings for use in Solr queries. One line per mapping, in the form alias,pid. Aliases should not begin with a /.'),
-    '#maxlength' => 60,
   );
   $form['islandora_cdm_api_field_to_field_mappings'] = array(
     '#title' => t('CONTENTdm field to Solr field mappings'),
     '#type' => 'textarea',
     '#rows' => 10,
     '#default_value' => variable_get('islandora_cdm_api_field_to_field_mappings', ''),
-    '#description' => t('CONTETNdm field nickname to Solr fieldn name mappings for use in Solr queries. One line per mapping, in the form field,field.'),
-    '#maxlength' => 60,
+    '#description' => t('CONTETNdm field nickname to Solr field name mappings for use in Solr queries. One line per mapping, in the form field,field.'),
   );
   $form['islandora_cdm_api_log_requests'] = array(
     '#type' => 'checkbox',
@@ -481,6 +479,11 @@ function islandora_cdm_api_dmgetiteminfo(array $params) {
  *   An array containing the alias, searchstrings, fields,
  *   sortby, maxrecs, start, suppress, docptr, suggest,
  *   facets, showunpub, denormalizedFacets, and format.
+ *   This array contains all the elements used in the CONTENTdm
+ *   query map.
+ *
+ * @return string
+ *   A JSON (?) string containing the results.
  */
 function islandora_cdm_api_dmquery(array $params) {
   // $alias = '', $searchstrings = '', $fields = '', $sortby = '',
@@ -497,6 +500,21 @@ function islandora_cdm_api_dmquery(array $params) {
 
   $fields_setting = variable_get('islandora_cdm_api_field_to_field_mappings', '');
   $field_map = islandora_cdm_api_get_mapping_from_string($fields_setting, ',');
+
+  // If $params[1 ('searchstrings') is 0, we have a browse; if it's not, we have
+  // a search.
+  if ($params[1] == '0') {
+    // First build the collection query. In a browse there will be only
+    // one collection.
+    $alias = $params[0];
+    $collection = 'info:fedora/' . $alias_to_pid_map[$alias];
+    $collection = preg_replace('/:/', '\:', $collection);
+    $collection_query = 'RELS_EXT_isMemberOfCollection_uri_t:' . $collection;
+    // Then build the field list.
+
+    // Then the sort list.
+  }
+
 
   /*
   This is the CONTENTdm query map for a browse:
