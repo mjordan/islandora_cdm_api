@@ -37,19 +37,65 @@ function islandora_cdm_api_map_request_to_pid($alias = '', $pointer = '') {
  * Performs a browse or search query against Islandora's Solr index.
  *
  * Returns a set of records.
+ *
+ * @param string $query
+ *   The query string.
+ *
+ * @return array
+ *   List of records from Solr formatted as CONTENTdm's native record set.
  */
 function islandora_cdm_api_query_solr($query) {
   $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
+  $query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $query;
+  $raw_result = drupal_http_request($query);
+  if ($raw_result->code != 200) {
+    return FALSE;
+  }
+  $query_result = json_decode($raw_result->data);
+  if ($query_result->response->numFound < 1) {
+    return FALSE;
+  }
+
+  // Convert the records in the format that the client expects.
+  $fake_cdm_response = array();
+  $fake_cdm_records = array();
+  $docs = $query_result->response->docs;
+  foreach ($docs as $doc) {
+    $doc = (array) $doc;
+    // dd($doc, 'Doc');
+    // Since fields are multivalued in Solr we just take the first one.
+    $fake_cdm_record = array();
+    if (isset($doc['dc.title'])) {
+      $fake_cdm_record['title'] = $doc['dc.title'][0];
+    }
+    else {
+      $fake_cdm_record['title'] = array();
+    }
+    if (isset($doc['dc.creator'])) {
+      $fake_cdm_record['creato'] = $doc['dc.creator'][0];
+    }
+    else {
+      $fake_cdm_record['creato'] = array();
+    }
+    if (isset($doc['dc.date'])) {
+      $fake_cdm_record['date'] = $doc['dc.date'][0];
+    }
+    else {
+      $fake_cdm_record['date'] = array();
+    }
+    if (isset($doc['dc.subject'])) {
+      $fake_cdm_record['subjec'] = $doc['dc.subject'][0];
+    }
+    else {
+      $fake_cdm_record['subjec'] = array();
+    }
+    $fake_cdm_records[] = $fake_cdm_record;
+  }
+  $fake_cdm_response['records'] = $fake_cdm_records;
+  return $fake_cdm_response;
 }
 
-/**
- * Query the resource index to get a list of collections.
- *
- * @todo: Filter out other unwanted collections.
- *
- * @return array
- *   List of PIDs corresponding to the collections or content models.
- */
+
 
 /**
  * Query the resource index to get a list of collections.
@@ -183,4 +229,3 @@ function islandora_cdm_api_get_mapping_from_string($string, $delimiter) {
   }
   return $map;
 }
-

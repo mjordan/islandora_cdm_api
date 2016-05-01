@@ -555,6 +555,9 @@ Array
     $sort_array[] = $field_map[$cdm_sortby_field] . '+asc';
   }
   $sort_string = '&sort=' . implode(',', $sort_array); 
+  // Hard code sorting for now.
+  $sort_string = '&sort=mods_originInfo_dateIssued_dt+asc,mods_titleInfo_title_t+asc,mods_name_personal_creator_namePart_t+asc';
+  
   // Then add the number of results to return and the pagination.
   // CONTENTdm pagers start counting at 1, Solr's at 0.
   $start = $params[5] - 1;
@@ -573,7 +576,10 @@ Array
     // We assume the object is in only one collection, as it was in
     // CONTENTdm.
     $collection_query = 'RELS_EXT_isMemberOfCollection_uri_t:' . $collection;
-    $browse_query = 'q=' . $collection_query . $fl_string . $sort_string . $pager;
+    $browse_query = $collection_query . $fl_string . $sort_string . $pager;
+
+    // "http://localhost:8080/solr/select?version=1.2&wt=json&json.nl=map&q=RELS_EXT_isMemberOfCollection_uri_t:info\:fedora/cartoons\:collection&fl=dc.title,dc.creator,dc.date,dc.subject,dc.description&sort=mods_originInfo_dateIssued_dt+asc,mods_titleInfo_title_t+asc,mods_name_personal_creator_namePart_t+asc&rows=10&start=0
+    $results = islandora_cdm_api_query_solr($browse_query);
   }
   // Search query. 
   else {
@@ -585,9 +591,9 @@ Array
     else {
       $alias_list[] = $params[0];
     }
-    // @todo: All we have is a list, we need to figure out how to express
-    // for a solr query and define $collection_query. Or the collection
-    // strings in field RELS_EXT_isMemberOfCollection_uri_t?
+    // @todo: All we have is a list of collection PIDs, we need to figure
+    // out how to express it as a solr query and define $collection_query.
+    // Or the collection strings in field RELS_EXT_isMemberOfCollection_uri_t?
 
     // Build search strings (keywords). 
     $searchstrings = preg_replace('/CISOSEARCHALL\^/', '', $params[1]);
