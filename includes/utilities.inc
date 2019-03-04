@@ -48,7 +48,7 @@ function islandora_cdm_api_query_solr($query) {
   $solr_url = variable_get('islandora_solr_url', 'http://localhost:8080/solr');
   $query = $solr_url . '/select?version=1.2&wt=json&json.nl=map&q=' . $query;
   $raw_result = drupal_http_request($query);
-  dd($raw_result);
+  // dd($raw_result);
   if ($raw_result->code != 200) {
     return FALSE;
   }
